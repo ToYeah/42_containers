@@ -1,6 +1,7 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <algorithm>
 #include <cstddef>
 #include <iterator>
 #include <memory>
@@ -30,7 +31,6 @@ class vector {
   pointer first_;
   pointer last_;
   pointer end_of_storage_;
-  size_type size_;
   allocator_type allocater_;
 
  public:
@@ -38,33 +38,20 @@ class vector {
       : first_(NULL),
         last_(NULL),
         end_of_storage_(NULL),
-        size_(0),
         allocater_(allocator_type()){};
 
   explicit vector(const Allocator& alloc)
-      : first_(NULL),
-        last_(NULL),
-        end_of_storage_(NULL),
-        size_(0),
-        allocater_(alloc){};
+      : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc){};
 
   explicit vector(size_type count, const T& value = T(),
                   const Allocator& alloc = Allocator())
-      : first_(NULL),
-        last_(NULL),
-        end_of_storage_(NULL),
-        size_(0),
-        allocater_(alloc) {
+      : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
     construct_storage(count, value);
   };
 
   template <class InputIt>
   vector(InputIt first, InputIt last, const Allocator& alloc = Allocator())
-      : first_(NULL),
-        last_(NULL),
-        end_of_storage_(NULL),
-        size_(0),
-        allocater_(alloc) {
+      : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
     construct_storage(std::distance(first, last));
     iterator dest_it = begin();
     for (InputIt src_it = first; src_it != last;) {
@@ -86,14 +73,39 @@ class vector {
   reverse_iterator rend() { return reverse_iterator(begin()); };
   const_reverse_iterator rend() const { return reverse_iterator(begin()); };
 
+  size_type size() const { return std::distance(begin(), end()); }
+
+  size_type max_size() const {
+    return std::distance(begin(), iterator(end_of_storage_));
+  }
+  size_type capacity() const {
+    return std::distance(end(), iterator(end_of_storage_));
+  };
+
+  bool empty() const { return size() == 0; };
+
+  iterator erase(iterator position) {
+    if (position + 1 != end()) {
+      difference_type distance = std::distance(begin(), position);
+      std::copy(position + 1, end(), position);
+      last_ -= 1;
+      destroy_elem(last_);
+      return begin() + distance;
+    }
+  };
+  iterator erase(iterator first, iterator last){};
+
+  void resize(size_type n, value_type val = value_type()){};
+
  private:
   void construct_storage(size_type size, const T& value = T()) {
     pointer tmp = allocater_.allocate(size);
     first_ = new (tmp) T(value);
     last_ = first_;
-    size_ = size;
     end_of_storage_ = first_ + size;
   }
+
+  void destroy_elem(pointer target) { allocater_.destroy(target); };
 };
 }  // namespace ft
 
