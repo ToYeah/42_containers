@@ -6,6 +6,7 @@
 #include <iterator>
 #include <memory>
 
+#include "Enable_if.hpp"
 #include "Random_access_iterator.hpp"
 #include "Reverse_iterator.hpp"
 
@@ -50,7 +51,8 @@ class vector {
   };
 
   template <class InputIt>
-  vector(InputIt first, InputIt last, const Allocator& alloc = Allocator())
+  vector(InputIt first, enable_if<!is_integral<InputIt>, InputIt>::type last,
+         const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
     construct_storage(std::distance(first, last));
     iterator dest_it = begin();
