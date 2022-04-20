@@ -117,7 +117,7 @@ class vector {
       destroy_elem(it);
     }
     last_ -= len;
-    return begin +
+    return first;
   };
 
  private:
