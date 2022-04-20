@@ -78,6 +78,15 @@ class vector {
   size_type max_size() const {
     return std::distance(begin(), iterator(end_of_storage_));
   }
+
+  void resize(size_type n, value_type val = value_type()) {
+    if (n < size()) {
+      erase(begin() + n, end());
+    } else if (n > size()) {
+      insert(end(), n - size(), val);
+    }
+  };
+
   size_type capacity() const {
     return std::distance(end(), iterator(end_of_storage_));
   };
@@ -85,17 +94,25 @@ class vector {
   bool empty() const { return size() == 0; };
 
   iterator erase(iterator position) {
+    difference_type distance = std::distance(begin(), position);
     if (position + 1 != end()) {
-      difference_type distance = std::distance(begin(), position);
       std::copy(position + 1, end(), position);
-      last_ -= 1;
-      destroy_elem(last_);
-      return begin() + distance;
     }
+    last_ -= 1;
+    destroy_elem(last_);
+    return begin() + distance;
   };
-  iterator erase(iterator first, iterator last){};
 
-  void resize(size_type n, value_type val = value_type()){};
+  iterator erase(iterator first, iterator last) {
+    difference_type len = std::distance(first, last);
+
+    std::copy(last, end(), first);
+    for (iterator it = first + std::distance(last, end()); it != end(); it++) {
+      destroy_elem(it);
+    }
+    last_ -= len;
+    return begin +
+  };
 
  private:
   void construct_storage(size_type size, const T& value = T()) {
