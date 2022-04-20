@@ -16,16 +16,16 @@ class vector {
  public:
   typedef T value_type;
   typedef Allocator allocator_type;
-  typedef std::size_t size_type;
-  typedef std::ptrdiff_t difference_type;
-  typedef value_type& reference;
-  typedef const value_type& const_reference;
+  typedef typename allocator_type::size_type size_type;
+  typedef typename allocator_type::difference_type difference_type;
+  typedef typename allocator_type::reference reference;
+  typedef typename allocator_type::const_reference const_reference;
   typedef typename allocator_type::pointer pointer;
-  typedef const typename allocator_type::pointer const_pointer;
-  typedef ft::ra_iterator<value_type> iterator;
-  typedef ft::ra_iterator<const value_type> const_iterator;
-  typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+  typedef typename allocator_type::pointer const_pointer;
+  typedef ft::ra_iterator<pointer> iterator;
+  typedef ft::ra_iterator<const_pointer> const_iterator;
   typedef ft::reverse_iterator<iterator> reverse_iterator;
+  typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
  protected:
   pointer first_;
