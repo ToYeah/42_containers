@@ -80,7 +80,8 @@ class vector {
   size_type size() const { return std::distance(begin(), end()); }
 
   size_type max_size() const {
-    return std::distance(begin(), iterator(end_of_storage_));
+    return std::min<size_type>(std::numeric_limits<difference_type>::max(),
+                               allocater_.max_size());
   }
 
   void resize(size_type n, value_type val = value_type()) {
