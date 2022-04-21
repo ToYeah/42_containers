@@ -58,7 +58,13 @@ class vector {
     construct_storage(std::distance(first, last));
   };
 
-  vector(const vector& other){};  // TODO
+  vector(const vector& other) {
+    if (this != &other) {
+      construct_storage(other.capacity());
+      std::copy(other.begin(), other.end(), this->begin());
+      last_ = first_ + other.size();
+    }
+  };
 
   iterator begin() { return iterator(first_); }
   const_iterator begin() const { return const_iterator(first_); }
