@@ -62,7 +62,8 @@ template <>
 struct is_integral_helper<unsigned long> : public true_type {};
 
 template <class T>
-struct is_integral : public is_integral_helper<remove_cv<T>>::type {};
+struct is_integral
+    : public is_integral_helper<typename remove_cv<T>::type>::type {};
 
 template <bool, typename T = void>
 struct enable_if {};
