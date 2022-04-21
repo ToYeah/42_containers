@@ -18,8 +18,8 @@ class ra_iterator {  // public iterator
   typedef typename traits_type_::reference reference;
   typedef typename traits_type_::pointer pointer;
 
-  ra_iterator() : current_(Iterator()){};
-  explicit ra_iterator(iterator_type x) : current_(iterator_type()){};
+  ra_iterator() : current_(NULL){};
+  explicit ra_iterator(iterator_type x) : current_(x){};
   ra_iterator(const ra_iterator& u) : current_(u.current_){};
   ~ra_iterator(){};
 

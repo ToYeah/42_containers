@@ -25,8 +25,8 @@ class reverse_iterator
   typedef
       typename iterator_traits<Iterator>::iterator_category iterator_category;
 
-  reverse_iterator() : current_(Iterator()){};
-  explicit reverse_iterator(iterator_type x) : current_(iterator_type()){};
+  reverse_iterator() : current_(NULL){};
+  explicit reverse_iterator(iterator_type x) : current_(x){};
   reverse_iterator(const reverse_iterator& u) : current_(u.current_){};
   ~reverse_iterator(){};
 
