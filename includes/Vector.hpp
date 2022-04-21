@@ -148,6 +148,10 @@ class vector {
     return first;
   };
 
+  reference operator[](size_type pos) { return first_[pos]; }
+
+  const_reference operator[](size_type pos) const { return first_[pos]; }
+
  private:
   void construct_storage(size_type size, const T& value = T()) {
     first_ = allocater_.allocate(size);
