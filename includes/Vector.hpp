@@ -66,6 +66,11 @@ class vector {
     }
   };
 
+  ~vector() {
+    destroy_elem_forward(rend());
+    allocater_.deallocate(first_, capacity());
+  }
+
   iterator begin() { return iterator(first_); }
   const_iterator begin() const { return const_iterator(first_); }
 
@@ -135,6 +140,12 @@ class vector {
   }
 
   void destroy_elem(pointer target) { allocater_.destroy(target); };
+
+  void destroy_elem_forward(reverse_iterator end_it) {
+    for (reverse_iterator it = rbegin(); it != end_it; it++) {
+      destroy_elem(&(*it));
+    }
+  };
 };
 }  // namespace ft
 
