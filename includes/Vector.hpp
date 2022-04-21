@@ -152,6 +152,20 @@ class vector {
 
   const_reference operator[](size_type pos) const { return first_[pos]; }
 
+  reference at(size_type pos) {
+    if (!(pos < size())) {
+      throw std::out_of_range("");
+    }
+    return first_[pos];
+  }
+
+  const_reference at(size_type pos) const {
+    if (!(pos < size())) {
+      throw std::out_of_range("");
+    }
+    return first_[pos];
+  }
+
  private:
   void construct_storage(size_type size, const T& value = T()) {
     first_ = allocater_.allocate(size);
