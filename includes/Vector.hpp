@@ -63,11 +63,12 @@ class vector {
       construct_storage(other.capacity());
       std::copy(other.begin(), other.end(), this->begin());
       last_ = first_ + other.size();
+      end_of_storage_ = first_ + other.capacity();
     }
   };
 
   ~vector() {
-    destroy_elem_forward(rend());
+    destroy_elem_forward(rbegin(), rend());
     allocater_.deallocate(first_, capacity());
   }
 
@@ -108,7 +109,23 @@ class vector {
 
   bool empty() const { return size() == 0; };
 
-  void reserve(size_type n) {}
+  void reserve(size_type n) {
+    if (n > capacity()) {
+      iterator old_begin = begin();
+      iterator old_end = end();
+      reverse_iterator old_rbegin = rbegin();
+      reverse_iterator old_rend = rend();
+      pointer old_first = first_;
+      size_type old_size = capacity();
+
+      construct_storage(n);
+      std::copy(old_begin, old_end, begin());
+      last_ = first_ + std::distance(old_begin, old_end);
+
+      destroy_elem_forward(old_rbegin, old_rend);
+      allocater_.deallocate(old_first, old_size);
+    }
+  }
 
   iterator erase(iterator position) {
     difference_type distance = std::distance(begin(), position);
@@ -141,8 +158,8 @@ class vector {
 
   void destroy_elem(pointer target) { allocater_.destroy(target); };
 
-  void destroy_elem_forward(reverse_iterator end_it) {
-    for (reverse_iterator it = rbegin(); it != end_it; it++) {
+  void destroy_elem_forward(reverse_iterator it, reverse_iterator end_it) {
+    for (; it != end_it; it++) {
       destroy_elem(&(*it));
     }
   };
