@@ -166,6 +166,22 @@ class vector {
     return first_[pos];
   }
 
+  reference front() { return *begin(); }
+
+  const_reference front() const { return *begin(); }
+
+  reference back() {
+    iterator tmp = end();
+    --tmp;
+    return *tmp;
+  }
+
+  const_reference back() const {
+    const_iterator tmp = end();
+    --tmp;
+    return *tmp;
+  }
+
  private:
   void construct_storage(size_type size, const T& value = T()) {
     first_ = allocater_.allocate(size);
