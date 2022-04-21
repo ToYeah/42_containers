@@ -51,14 +51,11 @@ class vector {
   };
 
   template <class InputIt>
-  vector(InputIt first, enable_if<!is_integral<InputIt>, InputIt>::type last,
+  vector(InputIt first,
+         typename enable_if<!is_integral<InputIt>::value, InputIt>::type last,
          const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
     construct_storage(std::distance(first, last));
-    iterator dest_it = begin();
-    for (InputIt src_it = first; src_it != last;) {
-      dest_it++ = src_it++;
-    }
   };
 
   vector(const vector& other){};  // TODO
@@ -95,7 +92,7 @@ class vector {
   };
 
   size_type capacity() const {
-    return std::distance(end(), iterator(end_of_storage_));
+    return std::distance(begin(), iterator(end_of_storage_));
   };
 
   bool empty() const { return size() == 0; };
@@ -125,9 +122,9 @@ class vector {
 
  private:
   void construct_storage(size_type size, const T& value = T()) {
-    pointer tmp = allocater_.allocate(size);
-    first_ = new (tmp) T(value);
-    last_ = first_;
+    first_ = allocater_.allocate(size);
+    std::uninitialized_fill_n(first_, size, value);
+    last_ = first_ + size;
     end_of_storage_ = first_ + size;
   }
 
