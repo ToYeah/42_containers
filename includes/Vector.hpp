@@ -58,20 +58,22 @@ class vector {
     construct_storage(std::distance(first, last));
   };
 
-  vector(const vector& other) {
-    if (this != &other) {
-      construct_storage(other.capacity());
-      std::copy(other.begin(), other.end(), this->begin());
-      last_ = first_ + other.size();
-      end_of_storage_ = first_ + other.capacity();
-    }
-  };
+  vector(const vector& other) { *this = other; };
 
   ~vector() {
     destroy_elem_forward(rbegin(), rend());
     allocater_.deallocate(first_, capacity());
   }
 
+  vector& operator=(const vector& other) {
+    if (this != &other) {
+      construct_storage(other.capacity());
+      std::copy(other.begin(), other.end(), this->begin());
+      last_ = first_ + other.size();
+      end_of_storage_ = first_ + other.capacity();
+    }
+    return *this;
+  }
   iterator begin() { return iterator(first_); }
   const_iterator begin() const { return const_iterator(first_); }
 
