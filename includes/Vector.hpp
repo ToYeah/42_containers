@@ -47,7 +47,12 @@ class vector {
   explicit vector(size_type count, const T& value = T(),
                   const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
-    construct_storage(count, value);
+    first_ = allocate(count);
+    last_ = first_ + count;
+    end_of_storage_ = first_ + count;
+    for (iterator it = begin(); it != end(); it++) {
+      construct(&(*it), value);
+    }
   };
 
   template <class InputIt>
