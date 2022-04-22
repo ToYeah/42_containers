@@ -159,6 +159,36 @@ class vector {
 
   const_reference operator[](size_type pos) const { return first_[pos]; }
 
+  void assign(size_type count, const T& value) {
+    size_type old_size = size();
+
+    reserve(calc_new_cap(count));
+    for (size_type i = 0; i < count; i++) {
+      construct(first_ + i, value);
+    }
+
+    if (old_size > count) {
+      destroy_until(rbegin() + old_size - count);
+    }
+  }
+
+  template <class InputIt>
+  void assign(
+      InputIt first,
+      typename enable_if<!is_integral<InputIt>::value, InputIt>::type last) {
+    size_type old_size = size();
+    size_type distance = std::distance(first, last);
+
+    reserve(calc_new_cap(distance));
+    for (size_type i = 0; i < distance; i++) {
+      construct(first_ + i, *(first + i));
+    }
+
+    if (old_size > distance) {
+      destroy_until(rbegin() + old_size - distance);
+    }
+  }
+
   reference at(size_type pos) {
     if (!(pos < size())) {
       throw std::out_of_range("");
@@ -211,12 +241,17 @@ class vector {
 
   void destroy_until(reverse_iterator rend) {
     for (reverse_iterator riter = rbegin(); riter != rend; ++riter, --last_) {
-      std::cout << "hello" << std::endl;
       destroy(&(*riter));
     }
   }
 
   void clear() { destroy_until(rend()); }
+
+  size_type calc_new_cap(size_type new_cap) {
+    size_type current_cap = capacity();
+    if (current_cap >= new_cap) return current_cap;
+    return std::max(current_cap * 2, new_cap);
+  }
 };
 }  // namespace ft
 
