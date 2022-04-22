@@ -143,21 +143,15 @@ class vector {
   }
 
   iterator erase(iterator position) {
-    difference_type distance = std::distance(begin(), position);
     std::copy(position + 1, end(), position);
-    last_ -= 1;
-    destroy(last_);
-    return begin() + distance;
+    destroy_until(rbegin() + 1);
+    return position;
   };
 
   iterator erase(iterator first, iterator last) {
     difference_type len = std::distance(first, last);
-
     std::copy(last, end(), first);
-    for (iterator it = first + std::distance(last, end()); it != end(); it++) {
-      destroy_elem(it);
-    }
-    last_ -= len;
+    destroy_until(rbegin() + len);
     return first;
   };
 
@@ -219,6 +213,7 @@ class vector {
 
   void destroy_until(reverse_iterator rend) {
     for (reverse_iterator riter = rbegin(); riter != rend; ++riter, --last_) {
+      std::cout << "hello" << std::endl;
       destroy(&(*riter));
     }
   }
