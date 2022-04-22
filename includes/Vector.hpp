@@ -61,8 +61,8 @@ class vector {
   vector(const vector& other) { *this = other; };
 
   ~vector() {
-    destroy_elem_forward(rbegin(), rend());
-    allocater_.deallocate(first_, capacity());
+    clear();
+    deallocate();
   }
 
   vector& operator=(const vector& other) {
@@ -74,6 +74,7 @@ class vector {
     }
     return *this;
   }
+
   iterator begin() { return iterator(first_); }
   const_iterator begin() const { return const_iterator(first_); }
 
@@ -199,6 +200,25 @@ class vector {
       destroy_elem(&(*it));
     }
   };
+  pointer allocate(size_type n) { return allocater_.allocate(n); }
+
+  void deallocate() { return allocater_.deallocate(first_, capacity()); }
+
+  void construct(pointer ptr) { allocater_.construct(ptr); }
+
+  void construct(pointer ptr, const_reference value) {
+    allocater_.construct(ptr, value);
+  }
+
+  void destroy(pointer ptr) { traits::destroy(alloc, ptr); }
+
+  void destroy_until(reverse_iterator rend) {
+    for (auto riter = rbegin(); riter != rend; ++riter, --last) {
+      destroy(&(*riter));
+    }
+  }
+
+  void clear() { destroy_until(rend()); }
 };
 }  // namespace ft
 
