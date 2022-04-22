@@ -113,21 +113,28 @@ class vector {
   bool empty() const { return size() == 0; };
 
   void reserve(size_type n) {
-    if (n > capacity()) {
-      iterator old_begin = begin();
-      iterator old_end = end();
-      reverse_iterator old_rbegin = rbegin();
-      reverse_iterator old_rend = rend();
-      pointer old_first = first_;
-      size_type old_size = capacity();
+    if (capacity() >= n) return;
 
-      construct_storage(n);
-      std::copy(old_begin, old_end, begin());
-      last_ = first_ + std::distance(old_begin, old_end);
+    iterator old_begin = begin();
+    iterator old_end = end();
+    reverse_iterator old_rbegin = rbegin();
+    reverse_iterator old_rend = rend();
+    pointer old_first = first_;
+    size_type old_cap = capacity();
+    size_type old_size = size();
 
-      destroy_elem_forward(old_rbegin, old_rend);
-      allocater_.deallocate(old_first, old_size);
+    first_ = allocate(n);
+    last_ = first_ + old_size;
+    end_of_storage_ = first_ + n;
+
+    for (size_t i = 0; (old_begin + i) != old_end; i++) {
+      construct(first_ + i, *(old_begin + i));
     }
+
+    for (reverse_iterator rit = old_rbegin; rit != old_rend; rit++) {
+      destroy(&(*rit));
+    }
+    allocater_.deallocate(old_first, old_cap);
   }
 
   iterator erase(iterator position) {
@@ -195,11 +202,6 @@ class vector {
 
   void destroy_elem(pointer target) { allocater_.destroy(target); };
 
-  void destroy_elem_forward(reverse_iterator it, reverse_iterator end_it) {
-    for (; it != end_it; it++) {
-      destroy_elem(&(*it));
-    }
-  };
   pointer allocate(size_type n) { return allocater_.allocate(n); }
 
   void deallocate() { return allocater_.deallocate(first_, capacity()); }
@@ -210,10 +212,10 @@ class vector {
     allocater_.construct(ptr, value);
   }
 
-  void destroy(pointer ptr) { traits::destroy(alloc, ptr); }
+  void destroy(pointer ptr) { allocater_.destroy(ptr); }
 
   void destroy_until(reverse_iterator rend) {
-    for (auto riter = rbegin(); riter != rend; ++riter, --last) {
+    for (reverse_iterator riter = rbegin(); riter != rend; ++riter, --last_) {
       destroy(&(*riter));
     }
   }
