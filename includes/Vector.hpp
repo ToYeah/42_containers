@@ -61,7 +61,7 @@ class vector {
          const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
     construct_storage(std::distance(first, last));
-  };
+  };  // TODO
 
   vector(const vector& other) { *this = other; };
 
@@ -144,11 +144,9 @@ class vector {
 
   iterator erase(iterator position) {
     difference_type distance = std::distance(begin(), position);
-    if (position + 1 != end()) {
-      std::copy(position + 1, end(), position);
-    }
+    std::copy(position + 1, end(), position);
     last_ -= 1;
-    destroy_elem(last_);
+    destroy(last_);
     return begin() + distance;
   };
 
