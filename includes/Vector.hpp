@@ -163,7 +163,8 @@ class vector {
     size_type old_size = size();
 
     reserve(calc_new_cap(count));
-    for (size_type i = 0; i < count; i++) {
+    last_ = first_;
+    for (size_type i = 0; i < count; i++, last_++) {
       construct(first_ + i, value);
     }
 
@@ -180,7 +181,8 @@ class vector {
     size_type distance = std::distance(first, last);
 
     reserve(calc_new_cap(distance));
-    for (size_type i = 0; i < distance; i++) {
+    last_ = first_;
+    for (size_type i = 0; i < distance; i++, last_++) {
       construct(first_ + i, *(first + i));
     }
 
