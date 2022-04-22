@@ -197,8 +197,6 @@ class vector {
     end_of_storage_ = first_ + size;
   }
 
-  void destroy_elem(pointer target) { allocater_.destroy(target); };
-
   pointer allocate(size_type n) { return allocater_.allocate(n); }
 
   void deallocate() { return allocater_.deallocate(first_, capacity()); }
