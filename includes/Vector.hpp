@@ -47,12 +47,7 @@ class vector {
   explicit vector(size_type count, const T& value = T(),
                   const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
-    first_ = allocate(count);
-    last_ = first_ + count;
-    end_of_storage_ = first_ + count;
-    for (iterator it = begin(); it != end(); it++) {
-      construct(&(*it), value);
-    }
+    insert(begin(), count, value);
   };
 
   template <class InputIt>
@@ -60,8 +55,8 @@ class vector {
          typename enable_if<!is_integral<InputIt>::value, InputIt>::type last,
          const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
-    construct_storage(std::distance(first, last));
-  };  // TODO
+    insert(begin(), first, last);
+  };
 
   vector(const vector& other) { *this = other; };
 
@@ -72,10 +67,7 @@ class vector {
 
   vector& operator=(const vector& other) {
     if (this != &other) {
-      construct_storage(other.capacity());
-      std::copy(other.begin(), other.end(), this->begin());
-      last_ = first_ + other.size();
-      end_of_storage_ = first_ + other.capacity();
+      assign(other.begin(), other.end());
     }
     return *this;
   }
@@ -242,13 +234,6 @@ class vector {
   }
 
  private:
-  void construct_storage(size_type size, const T& value = T()) {
-    first_ = allocater_.allocate(size);
-    std::uninitialized_fill_n(first_, size, value);
-    last_ = first_ + size;
-    end_of_storage_ = first_ + size;
-  }
-
   pointer allocate(size_type n) { return allocater_.allocate(n); }
 
   void deallocate() { return allocater_.deallocate(first_, capacity()); }
