@@ -208,6 +208,19 @@ class vector {
     }
   }
 
+  void push_back(const value_type& val) {
+    if (capacity() <= size()) {
+      reserve(calc_new_cap(capacity() + 1));
+    }
+    construct(last_, val);
+    last_++;
+  }
+
+  void pop_back() {
+    last_--;
+    destroy(last_);
+  }
+
   iterator insert(iterator pos, const value_type& value) {
     reserve(calc_new_cap(size() + 1));
     insert(pos, 1, value);
