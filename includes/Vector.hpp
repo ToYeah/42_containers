@@ -256,6 +256,13 @@ class vector {
 
   void clear() { destroy_until(rend()); }
 
+  void swap(vector& other) {
+    std::swap(first_, other.first_);
+    std::swap(last_, other.last_);
+    std::swap(end_of_storage_, other.end_of_storage_);
+    std::swap(allocater_, other.allocater_);
+  }
+
  private:
   pointer allocate(size_type n) { return allocater_.allocate(n); }
 
