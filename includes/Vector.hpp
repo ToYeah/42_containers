@@ -176,19 +176,6 @@ class vector {
 
   // Modifiers------------------------------------------
 
-  iterator erase(iterator position) {
-    std::copy(position + 1, end(), position);
-    destroy_until(rbegin() + 1);
-    return position;
-  };
-
-  iterator erase(iterator first, iterator last) {
-    difference_type len = std::distance(first, last);
-    std::copy(last, end(), first);
-    destroy_until(rbegin() + len);
-    return first;
-  };
-
   void assign(size_type count, const T& value) {
     size_type old_size = size();
 
@@ -240,6 +227,19 @@ class vector {
     pos = insert_helper(pos, std::distance(first, last));
     std::copy(first, last, pos);
   }
+
+  iterator erase(iterator position) {
+    std::copy(position + 1, end(), position);
+    destroy_until(rbegin() + 1);
+    return position;
+  };
+
+  iterator erase(iterator first, iterator last) {
+    difference_type len = std::distance(first, last);
+    std::copy(last, end(), first);
+    destroy_until(rbegin() + len);
+    return first;
+  };
 
  private:
   pointer allocate(size_type n) { return allocater_.allocate(n); }
