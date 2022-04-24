@@ -72,6 +72,8 @@ class vector {
     return *this;
   }
 
+  // Iterators-------------------------------------------
+
   iterator begin() { return iterator(first_); }
   const_iterator begin() const { return const_iterator(first_); }
 
@@ -87,6 +89,8 @@ class vector {
   const_reverse_iterator rend() const {
     return const_reverse_iterator(begin());
   };
+
+  // Capacity-------------------------------------------
 
   size_type size() const { return std::distance(begin(), end()); }
 
