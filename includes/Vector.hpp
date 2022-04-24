@@ -271,7 +271,7 @@ class vector {
   iterator insert_helper(iterator pos, size_type count) {
     if (capacity() < size() + count) {
       difference_type offset_size = std::distance(begin(), pos);
-      reserve(calc_new_cap(size() + 1));
+      reserve(calc_new_cap(size() + count));
       pos = begin() + offset_size;
     }
 
