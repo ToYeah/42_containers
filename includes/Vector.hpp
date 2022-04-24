@@ -208,13 +208,13 @@ class vector {
     }
   }
 
-  iterator insert(iterator pos, const T& value) {
+  iterator insert(iterator pos, const value_type& value) {
     reserve(calc_new_cap(size() + 1));
     insert(pos, 1, value);
     return pos;
   }
 
-  void insert(iterator pos, size_type count, const T& value) {
+  void insert(iterator pos, size_type count, const value_type& value) {
     pos = insert_helper(pos, count);
     std::fill_n(pos, count, value);
   }
