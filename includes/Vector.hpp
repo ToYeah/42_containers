@@ -138,6 +138,44 @@ class vector {
     allocater_.deallocate(old_first, old_cap);
   }
 
+  // Element access-------------------------------------
+
+  reference operator[](size_type pos) { return first_[pos]; }
+
+  const_reference operator[](size_type pos) const { return first_[pos]; }
+
+  reference at(size_type pos) {
+    if (!(pos < size())) {
+      throw std::out_of_range("");
+    }
+    return first_[pos];
+  }
+
+  const_reference at(size_type pos) const {
+    if (!(pos < size())) {
+      throw std::out_of_range("");
+    }
+    return first_[pos];
+  }
+
+  reference front() { return *begin(); }
+
+  const_reference front() const { return *begin(); }
+
+  reference back() {
+    iterator tmp = end();
+    --tmp;
+    return *tmp;
+  }
+
+  const_reference back() const {
+    const_iterator tmp = end();
+    --tmp;
+    return *tmp;
+  }
+
+  // Modifiers------------------------------------------
+
   iterator erase(iterator position) {
     std::copy(position + 1, end(), position);
     destroy_until(rbegin() + 1);
@@ -150,10 +188,6 @@ class vector {
     destroy_until(rbegin() + len);
     return first;
   };
-
-  reference operator[](size_type pos) { return first_[pos]; }
-
-  const_reference operator[](size_type pos) const { return first_[pos]; }
 
   void assign(size_type count, const T& value) {
     size_type old_size = size();
@@ -205,36 +239,6 @@ class vector {
       InputIt last) {
     pos = insert_helper(pos, std::distance(first, last));
     std::copy(first, last, pos);
-  }
-
-  reference at(size_type pos) {
-    if (!(pos < size())) {
-      throw std::out_of_range("");
-    }
-    return first_[pos];
-  }
-
-  const_reference at(size_type pos) const {
-    if (!(pos < size())) {
-      throw std::out_of_range("");
-    }
-    return first_[pos];
-  }
-
-  reference front() { return *begin(); }
-
-  const_reference front() const { return *begin(); }
-
-  reference back() {
-    iterator tmp = end();
-    --tmp;
-    return *tmp;
-  }
-
-  const_reference back() const {
-    const_iterator tmp = end();
-    --tmp;
-    return *tmp;
   }
 
  private:
