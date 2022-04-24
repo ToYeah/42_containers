@@ -47,7 +47,7 @@ class vector {
   explicit vector(size_type count, const T& value = T(),
                   const Allocator& alloc = Allocator())
       : first_(NULL), last_(NULL), end_of_storage_(NULL), allocater_(alloc) {
-    insert(begin(), count, value);
+    resize(count, value);
   };
 
   template <class InputIt>
