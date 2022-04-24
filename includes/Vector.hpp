@@ -241,6 +241,8 @@ class vector {
     return first;
   };
 
+  void clear() { destroy_until(rend()); }
+
  private:
   pointer allocate(size_type n) { return allocater_.allocate(n); }
 
@@ -259,8 +261,6 @@ class vector {
       destroy(&(*riter));
     }
   }
-
-  void clear() { destroy_until(rend()); }
 
   size_type calc_new_cap(size_type new_cap) {
     size_type current_cap = capacity();
