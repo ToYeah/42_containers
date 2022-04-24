@@ -191,6 +191,26 @@ class vector {
     }
   }
 
+  iterator insert(iterator pos, const T& value) {
+    reserve(calc_new_cap(size() + 1));
+    insert(pos, 1, value);
+    return pos;
+  }
+
+  void insert(iterator pos, size_type count, const T& value) {
+    pos = insert_helper(pos, count);
+    std::fill_n(pos, count, value);
+  }
+
+  template <class InputIt>
+  void insert(
+      iterator pos,
+      typename enable_if<!is_integral<InputIt>::value, InputIt>::type first,
+      InputIt last) {
+    pos = insert_helper(pos, std::distance(first, last));
+    std::copy(first, last, pos);
+  }
+
   reference at(size_type pos) {
     if (!(pos < size())) {
       throw std::out_of_range("");
@@ -253,6 +273,19 @@ class vector {
     size_type current_cap = capacity();
     if (current_cap >= new_cap) return current_cap;
     return std::max(current_cap * 2, new_cap);
+  }
+
+  iterator insert_helper(iterator pos, size_type count) {
+    if (capacity() < size() + count) {
+      difference_type offset_size = std::distance(begin(), pos);
+      reserve(calc_new_cap(size() + 1));
+      pos = begin() + offset_size;
+    }
+
+    std::uninitialized_fill_n(end(), count, T());
+    std::copy_backward(pos, end(), iterator(last_ + count));
+    last_ += count;
+    return pos;
   }
 };
 }  // namespace ft
