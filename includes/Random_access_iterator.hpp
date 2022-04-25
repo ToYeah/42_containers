@@ -122,9 +122,9 @@ ra_iterator<Iterator> operator+(
   return ra_iterator<Iterator>(it.base() + n);
 };
 
-template <class Iterator>
-typename ra_iterator<Iterator>::difference_type operator-(
-    const ra_iterator<Iterator>& lhs, const ra_iterator<Iterator>& rhs) {
+template <class Iterator1, class Iterator2>
+typename ra_iterator<Iterator1>::difference_type operator-(
+    const ra_iterator<Iterator1>& lhs, const ra_iterator<Iterator2>& rhs) {
   return lhs.base() - rhs.base();
 };
 }  // namespace ft
