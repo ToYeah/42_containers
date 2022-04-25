@@ -208,8 +208,8 @@ class vector {
 
     reserve(calc_new_cap(new_size));
     last_ = first_;
-    for (size_type i = 0; i < new_size; i++, last_++) {
-      construct(first_ + i, *(first + i));
+    for (; size() < new_size; last_++, first++) {
+      construct(last_, *first);
     }
 
     if (old_size > new_size) {
