@@ -231,7 +231,6 @@ class vector {
   }
 
   iterator insert(iterator pos, const value_type& value) {
-    reserve(calc_new_cap(size() + 1));
     insert(pos, 1, value);
     return pos;
   }
