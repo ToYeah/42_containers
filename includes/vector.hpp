@@ -23,7 +23,7 @@ class vector {
   typedef typename allocator_type::reference reference;
   typedef typename allocator_type::const_reference const_reference;
   typedef typename allocator_type::pointer pointer;
-  typedef typename allocator_type::pointer const_pointer;
+  typedef typename allocator_type::const_pointer const_pointer;
   typedef ft::ra_iterator<pointer> iterator;
   typedef ft::ra_iterator<const_pointer> const_iterator;
   typedef ft::reverse_iterator<iterator> reverse_iterator;
@@ -115,7 +115,7 @@ class vector {
   };
 
   size_type capacity() const {
-    return std::distance(begin(), iterator(end_of_storage_));
+    return std::distance(begin(), const_iterator(end_of_storage_));
   };
 
   bool empty() const { return size() == 0; };

@@ -27,7 +27,9 @@ class reverse_iterator
 
   reverse_iterator() : current_(NULL){};
   explicit reverse_iterator(iterator_type x) : current_(x){};
-  reverse_iterator(const reverse_iterator& u) : current_(u.current_){};
+  template <class Iter>
+  reverse_iterator(const reverse_iterator<Iter>& rev_it)
+      : current_(rev_it.base()){};
   ~reverse_iterator(){};
 
   reverse_iterator& operator=(const reverse_iterator& rhs) {

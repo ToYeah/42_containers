@@ -20,7 +20,8 @@ class ra_iterator {  // public iterator
 
   ra_iterator() : current_(NULL){};
   explicit ra_iterator(iterator_type x) : current_(x){};
-  ra_iterator(const ra_iterator& u) : current_(u.current_){};
+  template <class Iter>
+  ra_iterator(const ra_iterator<Iter>& it) : current_(it.base()){};
   ~ra_iterator(){};
 
   ra_iterator& operator=(const ra_iterator& rhs) {
