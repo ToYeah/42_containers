@@ -106,25 +106,25 @@ bool operator!=(const reverse_iterator<Iterator1>& lhs,
 template <class Iterator1, class Iterator2>
 bool operator>(const reverse_iterator<Iterator1>& lhs,
                const reverse_iterator<Iterator2>& rhs) {
-  return lhs.base() > rhs.base();
+  return lhs.base() < rhs.base();
 };
 
 template <class Iterator1, class Iterator2>
 bool operator<(const reverse_iterator<Iterator1>& lhs,
                const reverse_iterator<Iterator2>& rhs) {
-  return lhs.base() < rhs.base();
+  return lhs.base() > rhs.base();
 };
 
 template <class Iterator1, class Iterator2>
 bool operator>=(const reverse_iterator<Iterator1>& lhs,
                 const reverse_iterator<Iterator2>& rhs) {
-  return lhs.base() >= rhs.base();
+  return !(lhs < rhs);
 };
 
 template <class Iterator1, class Iterator2>
 bool operator<=(const reverse_iterator<Iterator1>& lhs,
                 const reverse_iterator<Iterator2>& rhs) {
-  return lhs.base() <= rhs.base();
+  return !(lhs > rhs);
 };
 
 template <class Iterator>
