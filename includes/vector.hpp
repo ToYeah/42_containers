@@ -210,8 +210,8 @@ class vector {
 
     reserve(calc_new_cap(new_size));
     last_ = first_;
-    for (; size() < new_size; last_++, first++) {
-      construct(last_, *first);
+    for (InputIt it = first; it != last; last_++, it++) {
+      construct(last_, *it);
     }
 
     if (old_size > new_size) {
