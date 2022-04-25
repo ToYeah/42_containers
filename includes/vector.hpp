@@ -7,9 +7,9 @@
 #include <limits>
 #include <memory>
 
-#include "Enable_if.hpp"
-#include "Random_access_iterator.hpp"
-#include "Reverse_iterator.hpp"
+#include "enable_if.hpp"
+#include "random_access_iterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft {
 
