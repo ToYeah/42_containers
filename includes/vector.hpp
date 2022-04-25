@@ -179,6 +179,7 @@ class vector {
 
   void assign(size_type count, const T& value) {
     size_type old_size = size();
+    reverse_iterator old_rbegin = rbegin();
 
     reserve(calc_new_cap(count));
     last_ = first_;
@@ -187,7 +188,7 @@ class vector {
     }
 
     if (old_size > count) {
-      destroy_until(rbegin() + old_size - count);
+      destroy_until(old_rbegin + (old_size - count));
     }
   }
 
@@ -196,16 +197,17 @@ class vector {
       InputIt first,
       typename enable_if<!is_integral<InputIt>::value, InputIt>::type last) {
     size_type old_size = size();
-    size_type distance = std::distance(first, last);
+    reverse_iterator old_rbegin = rbegin();
+    size_type new_size = std::distance(first, last);
 
-    reserve(calc_new_cap(distance));
+    reserve(calc_new_cap(new_size));
     last_ = first_;
-    for (size_type i = 0; i < distance; i++, last_++) {
+    for (size_type i = 0; i < new_size; i++, last_++) {
       construct(first_ + i, *(first + i));
     }
 
-    if (old_size > distance) {
-      destroy_until(rbegin() + old_size - distance);
+    if (old_size > new_size) {
+      destroy_until(old_rbegin + (old_size - new_size));
     }
   }
 
