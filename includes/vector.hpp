@@ -59,7 +59,13 @@ class vector {
     insert(begin(), first, last);
   };
 
-  vector(const vector& other) { *this = other; };
+  vector(const vector& other)
+      : first_(NULL),
+        last_(NULL),
+        end_of_storage_(NULL),
+        allocater_(allocator_type(other.allocater_)) {
+    *this = other;
+  };
 
   ~vector() {
     clear();
