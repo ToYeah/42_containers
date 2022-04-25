@@ -271,6 +271,8 @@ class vector {
     std::swap(allocater_, other.allocater_);
   }
 
+  allocator_type get_allocator() const { return allocater_; }
+
  private:
   pointer allocate(size_type n) { return allocater_.allocate(n); }
 
