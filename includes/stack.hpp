@@ -30,16 +30,56 @@ class stack {
 
   // Element access--------------------------------------
 
-  value_type& top() { c.back(); }
+  value_type& top() { return c.back(); }
 
-  const value_type& top() const { c.back(); }
+  const value_type& top() const { return c.back(); }
 
   // Capacity--------------------------------------------
 
   bool empty() const { return size() == 0; }
 
   size_type size() const { return c.size(); };
+
+  // Modifiers-------------------------------------------
+
+  void push(const value_type& val) { c.push_back(val); }
+
+  void pop() { c.pop_back(); };
 };
+
+template <class T, class Container>
+bool operator==(const stack<T, Container>& lhs,
+                const stack<T, Container>& rhs) {
+  return lhs.c == rhs.c;
+}
+
+template <class T, class Container>
+bool operator!=(const stack<T, Container>& lhs,
+                const stack<T, Container>& rhs) {
+  return !(lhs.c == rhs.c);
+}
+
+template <class T, class Container>
+bool operator<(const stack<T, Container>& lhs, const stack<T, Container>& rhs) {
+  return lhs.c < rhs.c;
+}
+
+template <class T, class Container>
+bool operator<=(const stack<T, Container>& lhs,
+                const stack<T, Container>& rhs) {
+  !(lhs > rhs);
+}
+
+template <class T, class Container>
+bool operator>(const stack<T, Container>& lhs, const stack<T, Container>& rhs) {
+  return rhs < lhs;
+}
+
+template <class T, class Container>
+bool operator>=(const stack<T, Container>& lhs,
+                const stack<T, Container>& rhs) {
+  !(lhs < rhs);
+}
 
 }  // namespace ft
 
