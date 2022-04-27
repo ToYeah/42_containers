@@ -33,6 +33,12 @@ class stack {
   value_type& top() { c.back(); }
 
   const value_type& top() const { c.back(); }
+
+  // Capacity--------------------------------------------
+
+  bool empty() const { return size() == 0; }
+
+  size_type size() const { return c.size(); };
 };
 
 }  // namespace ft
