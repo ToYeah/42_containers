@@ -14,7 +14,7 @@ class stack {
   typedef typename Container::size_type size_type;
 
  protected:
-  Container c;
+  container_type c;
 
  public:
   explicit stack(const Container& cont = Container()) : c(cont) {}
@@ -27,6 +27,12 @@ class stack {
     }
     return *this;
   }
+
+  // Element access--------------------------------------
+
+  value_type& top() { c.back(); }
+
+  const value_type& top() const { c.back(); }
 };
 
 }  // namespace ft
