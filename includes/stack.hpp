@@ -18,6 +18,15 @@ class stack {
 
  public:
   explicit stack(const Container& cont = Container()) : c(cont) {}
+
+  ~stack() {}
+
+  stack& operator=(const stack& other) {
+    if (this != &other) {
+      c = other.c;
+    }
+    return *this;
+  }
 };
 
 }  // namespace ft
