@@ -80,12 +80,13 @@ template <typename T>
 class AVLTree {
  private:
   typedef Node<T> Node;
-  Node* root;
+  Node*& root;
+  Node end;
 
  public:
-  AVLTree() : root(NULL){};
+  AVLTree() : root(end.left){};
 
-  AVLTree(const AVLTree& src) : root(NULL) { *this = src; };
+  AVLTree(const AVLTree& src) : root(end.left) { *this = src; };
 
   ~AVLTree(){
       // delete node;
@@ -99,8 +100,10 @@ class AVLTree {
   }
 
   void addNode(const T value) {
-    if (!root)
-      root = new Node(value);
+    if (!root) {
+      root = new Node(value, &end);
+    }
+
     else
       root->addNode(value);
   }
