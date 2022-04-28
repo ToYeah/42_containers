@@ -4,17 +4,45 @@
 #include <cstddef>
 
 template <typename T>
+struct Node {
+  T data;
+  Node* left;
+  Node* right;
+  Node* parent;
+  int height;
+  int bias;
+
+  Node(const T& value = T())
+      : data(value),
+        left(NULL),
+        right(NULL),
+        parent(NULL),
+        height(0),
+        bias(0) {}
+
+  Node(const Node& src) { *this = src; }
+
+  ~Node() {}
+
+  Node& operator=(const Node& rhs) {
+    if (this != &rhs) {
+      data = rhs.data;
+      left = rhs.left;
+      right = rhs.right;
+      parent = rhs.parent;
+      height = rhs.height;
+      bias = rhs.bias;
+    }
+    return *this;
+  }
+
+  void printTree() {}
+};
+
+template <typename T>
 class AVLTree {
  private:
-  struct Node {
-    T data;
-    Node* left;
-    Node* right;
-    Node* parent;
-    int height;
-    int bias;
-  };
-
+  typedef Node<T> Node;
   Node* root;
 
  public:
