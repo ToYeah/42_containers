@@ -5,6 +5,9 @@
 #include <functional>
 #include <iostream>
 
+#define RIGHT true
+#define LEFT false
+
 namespace ft {
 
 template <typename T>
@@ -46,7 +49,8 @@ struct Node {
       (*target)->addNode(value);
     else
       (*target) = new Node(value, this);
-    calc_height_and_bias();
+    calcHeightAndBias();
+    rotate();
   }
 
   void printTree() {
@@ -66,13 +70,58 @@ struct Node {
     return false;
   }
 
-  void calc_height_and_bias() {
+  void calcHeightAndBias() {
     int right_h = right ? right->height : 0;
     int left_h = left ? left->height : 0;
     height = 1;
 
     height += left_h > right_h ? left_h : right_h;
     bias = left_h - right_h;
+  }
+
+  void joinNode(Node* parent, bool is_right_child, Node* child) {
+    if (is_right_child) {
+      parent->right = child;
+    } else {
+      parent->left = child;
+    }
+    if (child) {
+      child->parent = parent;
+    }
+  }
+
+  void rotate() {
+    if (bias > 1) {
+      rotateR();
+    } else if (bias < -1) {
+      rotateL();
+    }
+  }
+
+  void rotateL() {
+    Node* pivot = right;
+    Node* old_parent = parent;
+    bool is_right_child = this->parent->right == this ? true : false;
+
+    joinNode(this, RIGHT, pivot->left);
+    joinNode(pivot, LEFT, this);
+    joinNode(old_parent, is_right_child, pivot);
+    this->calcHeightAndBias();
+    pivot->calcHeightAndBias();
+    old_parent->calcHeightAndBias();
+  }
+
+  void rotateR() {
+    Node* pivot = left;
+    Node* old_parent = parent;
+    bool is_right_child = this->parent->right == this ? true : false;
+
+    joinNode(this, LEFT, pivot->right);
+    joinNode(pivot, RIGHT, this);
+    joinNode(old_parent, is_right_child, pivot);
+    this->calcHeightAndBias();
+    pivot->calcHeightAndBias();
+    old_parent->calcHeightAndBias();
   }
 };
 
