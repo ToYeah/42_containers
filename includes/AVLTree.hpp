@@ -16,11 +16,11 @@ struct Node {
   int height;
   int bias;
 
-  Node(const T& value = T())
+  Node(const T& value = T(), Node* parent = NULL)
       : data(value),
         left(NULL),
         right(NULL),
-        parent(NULL),
+        parent(parent),
         height(0),
         bias(0) {}
 
@@ -45,12 +45,12 @@ struct Node {
       if (right)
         right->addNode(value);
       else
-        right = new Node(value);
+        right = new Node(value, this);
     } else {
       if (left)
         left->addNode(value);
       else
-        left = new Node(value);
+        left = new Node(value, this);
     }
   }
 
