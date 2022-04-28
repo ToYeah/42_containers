@@ -65,6 +65,21 @@ struct Node {
     if (right) right->printTree();
   }
 
+  void printTreeGraph() {
+    if (left) left->printTreeGraph();
+    std::cout << data << " [label=\"" << data << "\nbias: " << bias
+              << "\nheight: " << height << "\"]" << std::endl;
+    if (left) {
+      std::cout << data << "->" << left->data << " [color = blue];"
+                << std::endl;
+    }
+    if (right) {
+      std::cout << data << "->" << right->data << " [color = red];"
+                << std::endl;
+    }
+    if (right) right->printTreeGraph();
+  }
+
   bool compare(const T& value) {
     if (data < value) return true;
     return false;
@@ -163,6 +178,16 @@ class AVLTree {
     } else {
       std::cout << "-----------------------------------" << std::endl;
       root->printTree();
+    }
+  }
+
+  void printTreeGraph() {
+    if (!root) {
+      std::cout << "root is NULL." << std::endl;
+    } else {
+      std::cout << "digraph sample {" << std::endl;
+      root->printTreeGraph();
+      std::cout << "}" << std::endl;
     }
   }
 };
