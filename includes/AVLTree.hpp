@@ -21,7 +21,7 @@ struct Node {
         left(NULL),
         right(NULL),
         parent(parent),
-        height(0),
+        height(1),
         bias(0) {}
 
   Node(const Node& src) { *this = src; }
@@ -41,17 +41,12 @@ struct Node {
   }
 
   void addNode(const T& value) {
-    if (compare(value)) {
-      if (right)
-        right->addNode(value);
-      else
-        right = new Node(value, this);
-    } else {
-      if (left)
-        left->addNode(value);
-      else
-        left = new Node(value, this);
-    }
+    Node** target = compare(value) ? &right : &left;
+    if (*target)
+      (*target)->addNode(value);
+    else
+      (*target) = new Node(value, this);
+    calc_height_and_bias();
   }
 
   void printTree() {
@@ -69,6 +64,15 @@ struct Node {
   bool compare(const T& value) {
     if (data < value) return true;
     return false;
+  }
+
+  void calc_height_and_bias() {
+    int right_h = right ? right->height : 0;
+    int left_h = left ? left->height : 0;
+    height = 1;
+
+    height += left_h > right_h ? left_h : right_h;
+    bias = left_h - right_h;
   }
 };
 
