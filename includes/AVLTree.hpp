@@ -2,6 +2,10 @@
 #define AVLTREE_HPP
 
 #include <cstddef>
+#include <functional>
+#include <iostream>
+
+namespace ft {
 
 template <typename T>
 struct Node {
@@ -36,7 +40,36 @@ struct Node {
     return *this;
   }
 
-  void printTree() {}
+  void addNode(const T& value) {
+    if (compare(value)) {
+      if (right)
+        right->addNode(value);
+      else
+        right = new Node(value);
+    } else {
+      if (left)
+        left->addNode(value);
+      else
+        left = new Node(value);
+    }
+  }
+
+  void printTree() {
+    if (left) left->printTree();
+    std::cout << "data: " << data << std::endl;
+    std::cout << "height: " << height << std::endl;
+    std::cout << "bias: " << bias << std::endl;
+    if (left) std::cout << "left: " << left->data << std::endl;
+    if (right) std::cout << "right: " << right->data << std::endl;
+    if (parent) std::cout << "parent: " << parent->data << std::endl;
+    std::cout << "-----------------------------------" << std::endl;
+    if (right) right->printTree();
+  }
+
+  bool compare(const T& value) {
+    if (data < value) return true;
+    return false;
+  }
 };
 
 template <typename T>
@@ -60,7 +93,25 @@ class AVLTree {
     }
     return *this;
   }
+
+  void addNode(const T value) {
+    if (!root)
+      root = new Node(value);
+    else
+      root->addNode(value);
+  }
+
+  void printTree() {
+    if (!root) {
+      std::cout << "root is NULL." << std::endl;
+    } else {
+      std::cout << "-----------------------------------" << std::endl;
+      root->printTree();
+    }
+  }
 };
+
+}  // namespace ft
 
 #endif /* ********************************************************* AVLTREE_H \
         */
