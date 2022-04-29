@@ -107,9 +107,20 @@ struct Node {
 
   void rotate() {
     if (bias > 1) {
-      rotateR();
+      if (left && left->bias <= -1) {
+        left->rotateL();
+        rotateR();
+      } else {
+        rotateR();
+      }
+
     } else if (bias < -1) {
-      rotateL();
+      if (right && right->bias >= 1) {
+        right->rotateR();
+        rotateL();
+      } else {
+        rotateL();
+      }
     }
   }
 
