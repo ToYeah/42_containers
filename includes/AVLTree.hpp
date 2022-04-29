@@ -75,6 +75,10 @@ struct Node {
     return false;
   }
 
+  bool equal(const T& value) {
+    return !(compare(value)) && !(Node(value).compare(data));
+  }
+
   void calcHeightAndBias() {
     int right_h = right ? right->height : 0;
     int left_h = left ? left->height : 0;
@@ -173,7 +177,7 @@ class AVLTree {
     return *this;
   }
 
-  void addNode(const T value) {
+  void addNode(const T& value) {
     if (!root) {
       root = new Node(value, &end);
       return;
@@ -193,6 +197,14 @@ class AVLTree {
       featured->updateNode();
       featured = featured->parent;
     }
+  }
+
+  Node* findNode(const T& value) {
+    Node* featured = root;
+    while (featured && !featured->equal(value)) {
+      featured = *(featured->getNextDirection(value));
+    }
+    return featured;
   }
 
   void printTree() {
