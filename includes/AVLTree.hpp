@@ -29,7 +29,15 @@ struct Node {
 
   Node(const Node& src) { *this = src; }
 
-  ~Node() {}
+  ~Node() {
+    if (parent) {
+      if (isRightChild()) {
+        parent->right = NULL;
+      } else {
+        parent->left = NULL;
+      }
+    }
+  }
 
   Node& operator=(const Node& rhs) {
     if (this != &rhs) {
@@ -121,7 +129,7 @@ struct Node {
   void rotateL() {
     Node* pivot = right;
     Node* old_parent = parent;
-    bool is_right_child = this->parent->right == this ? true : false;
+    bool is_right_child = isRightChild();
 
     joinNode(this, RIGHT, pivot->left);
     joinNode(pivot, LEFT, this);
@@ -134,7 +142,7 @@ struct Node {
   void rotateR() {
     Node* pivot = left;
     Node* old_parent = parent;
-    bool is_right_child = this->parent->right == this ? true : false;
+    bool is_right_child = isRightChild();
 
     joinNode(this, LEFT, pivot->right);
     joinNode(pivot, RIGHT, this);
@@ -152,6 +160,16 @@ struct Node {
   Node** getNextDirection(const T& value) {
     return compare(value) ? &right : &left;
   }
+
+  Node* getMaxNode() {
+    Node* featured = this;
+    while (featured->right) {
+      featured = featured->right;
+    }
+    return featured;
+  }
+
+  bool isRightChild() { return this->parent->right == this ? true : false; }
 };
 
 template <typename T>
@@ -177,6 +195,13 @@ class AVLTree {
     return *this;
   }
 
+  void balanceNode(Node* featured) {
+    while (featured && featured != &end) {
+      featured->updateNode();
+      featured = featured->parent;
+    }
+  }
+
   void addNode(const T& value) {
     if (!root) {
       root = new Node(value, &end);
@@ -193,10 +218,7 @@ class AVLTree {
 
     *target = new Node(value, featured);
 
-    while (featured != &end) {
-      featured->updateNode();
-      featured = featured->parent;
-    }
+    balanceNode(featured);
   }
 
   Node* findNode(const T& value) {
@@ -205,6 +227,26 @@ class AVLTree {
       featured = *(featured->getNextDirection(value));
     }
     return featured;
+  }
+
+  void deleteNode(const T& value) {
+    Node* target = findNode(value);
+    if (!target) return;
+
+    Node* deleteTarget = target;
+    Node* featured = deleteTarget->parent;
+
+    if (target->left) {
+      deleteTarget = target->left->getMaxNode();
+      featured = deleteTarget->parent;
+      target->data = deleteTarget->data;
+    } else if (target->right) {
+      target->joinNode(target->parent, target->isRightChild(), target->right);
+      deleteTarget->parent = NULL;
+    }
+
+    delete deleteTarget;
+    balanceNode(featured);
   }
 
   void printTree() {
