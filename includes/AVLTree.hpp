@@ -43,16 +43,6 @@ struct Node {
     return *this;
   }
 
-  void addNode(const T& value) {
-    Node** target = compare(value) ? &right : &left;
-    if (*target)
-      (*target)->addNode(value);
-    else
-      (*target) = new Node(value, this);
-    calcHeightAndBias();
-    rotate();
-  }
-
   void printTree() {
     if (left) left->printTree();
     std::cout << "data: " << data << std::endl;
@@ -149,6 +139,15 @@ struct Node {
     pivot->calcHeightAndBias();
     old_parent->calcHeightAndBias();
   }
+
+  void updateNode() {
+    calcHeightAndBias();
+    rotate();
+  }
+
+  Node** getNextDirection(const T& value) {
+    return compare(value) ? &right : &left;
+  }
 };
 
 template <typename T>
@@ -177,10 +176,23 @@ class AVLTree {
   void addNode(const T value) {
     if (!root) {
       root = new Node(value, &end);
+      return;
     }
 
-    else
-      root->addNode(value);
+    Node* featured = root;
+    Node** target = NULL;
+    while (1) {
+      target = featured->getNextDirection(value);
+      if (*target == NULL) break;
+      featured = *target;
+    }
+
+    *target = new Node(value, featured);
+
+    while (featured != &end) {
+      featured->updateNode();
+      featured = featured->parent;
+    }
   }
 
   void printTree() {
