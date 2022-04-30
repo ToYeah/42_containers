@@ -169,6 +169,40 @@ struct Node {
     return featured;
   }
 
+  Node* getMinNode() {
+    Node* featured = this;
+    while (featured->left) {
+      featured = featured->left;
+    }
+    return featured;
+  }
+
+  Node* getNextNode() {
+    if (right) {
+      return right->getMinNode();
+    } else if (!isRightChild()) {
+      return parent;
+    }
+    Node* featured = parent;
+    while (featured->isRightChild()) {
+      featured = featured->parent;
+    }
+    return featured->parent;
+  }
+
+  Node* getPrevNode() {
+    if (left) {
+      return left->getMaxNode();
+    } else if (isRightChild()) {
+      return parent;
+    }
+    Node* featured = parent;
+    while (featured->parent->parent && !(featured->isRightChild())) {
+      featured = featured->parent;
+    }
+    return featured->parent;
+  }
+
   bool isRightChild() { return this->parent->right == this ? true : false; }
 };
 
