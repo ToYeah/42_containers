@@ -218,8 +218,21 @@ class AVLTree {
 
   AVLTree(const AVLTree& src) : root(end.left) { *this = src; };
 
-  ~AVLTree(){
-      // delete node;
+  ~AVLTree() {
+    if (root == NULL) return;
+
+    Node* featured = root->getMinNode();
+    while (featured != &end) {
+      if (featured->left)
+        featured = featured->left;
+      else if (featured->right)
+        featured = featured->right;
+      else {
+        Node* tmp = featured;
+        featured = featured->parent;
+        delete tmp;
+      }
+    }
   };
 
   AVLTree& operator=(const AVLTree& rhs) {
