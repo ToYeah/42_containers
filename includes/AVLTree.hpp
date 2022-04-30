@@ -5,12 +5,15 @@
 #include <functional>
 #include <iostream>
 
+#include "pair.hpp"
+
 #define RIGHT true
 #define LEFT false
 
 namespace ft {
 
-template <typename T>
+template <class Key, class T, class Compare = std::less<Key>,
+          class Allocator = std::allocator<ft::pair<const Key, T>>>
 class AVLTree {
  private:
   struct AVLNode {
