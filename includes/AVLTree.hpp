@@ -18,6 +18,7 @@ struct Node {
   Node* parent;
   int height;
   int bias;
+  int size;
 
   Node(const T& value = T(), Node* parent = NULL)
       : data(value),
@@ -25,6 +26,7 @@ struct Node {
         right(NULL),
         parent(parent),
         height(1),
+        size(1),
         bias(0) {}
 
   Node(const Node& src) { *this = src; }
@@ -47,6 +49,7 @@ struct Node {
       parent = rhs.parent;
       height = rhs.height;
       bias = rhs.bias;
+      size = rhs.size;
     }
     return *this;
   }
@@ -66,7 +69,8 @@ struct Node {
   void printTreeGraph() {
     if (left) left->printTreeGraph();
     std::cout << data << " [label=\"" << data << "\nbias: " << bias
-              << "\nheight: " << height << "\"]" << std::endl;
+              << "\nheight: " << height << "\nsize: " << size << "\"]"
+              << std::endl;
     if (left) {
       std::cout << data << "->" << left->data << " [color = blue];"
                 << std::endl;
@@ -91,9 +95,13 @@ struct Node {
     int right_h = right ? right->height : 0;
     int left_h = left ? left->height : 0;
     height = 1;
-
     height += left_h > right_h ? left_h : right_h;
     bias = left_h - right_h;
+
+    size = 1;
+    int right_s = right ? right->size : 0;
+    int left_s = left ? left->size : 0;
+    size += right_s + left_s;
   }
 
   void joinNode(Node* parent, bool is_right_child, Node* child) {
