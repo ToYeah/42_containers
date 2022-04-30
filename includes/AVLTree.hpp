@@ -11,16 +11,16 @@
 namespace ft {
 
 template <typename T>
-struct Node {
+struct AVLNode {
   T data;
-  Node* left;
-  Node* right;
-  Node* parent;
+  AVLNode* left;
+  AVLNode* right;
+  AVLNode* parent;
   int height;
   int bias;
   int size;
 
-  Node(const T& value = T(), Node* parent = NULL)
+  AVLNode(const T& value = T(), AVLNode* parent = NULL)
       : data(value),
         left(NULL),
         right(NULL),
@@ -29,9 +29,9 @@ struct Node {
         size(1),
         bias(0) {}
 
-  Node(const Node& src) { *this = src; }
+  AVLNode(const AVLNode& src) { *this = src; }
 
-  ~Node() {
+  ~AVLNode() {
     if (parent) {
       if (isRightChild()) {
         parent->right = NULL;
@@ -41,7 +41,7 @@ struct Node {
     }
   }
 
-  Node& operator=(const Node& rhs) {
+  AVLNode& operator=(const AVLNode& rhs) {
     if (this != &rhs) {
       data = rhs.data;
       left = rhs.left;
@@ -76,7 +76,7 @@ struct Node {
   }
 
   bool equal(const T& value) {
-    return !(compare(value)) && !(Node(value).compare(data));
+    return !(compare(value)) && !(AVLNode(value).compare(data));
   }
 
   void updateNodeInfo() {
@@ -92,7 +92,7 @@ struct Node {
     size += right_s + left_s;
   }
 
-  void joinNode(Node* parent, bool is_right_child, Node* child) {
+  void joinNode(AVLNode* parent, bool is_right_child, AVLNode* child) {
     if (is_right_child) {
       parent->right = child;
     } else {
@@ -123,8 +123,8 @@ struct Node {
   }
 
   void rotateL() {
-    Node* pivot = right;
-    Node* old_parent = parent;
+    AVLNode* pivot = right;
+    AVLNode* old_parent = parent;
     bool is_right_child = isRightChild();
 
     joinNode(this, RIGHT, pivot->left);
@@ -136,8 +136,8 @@ struct Node {
   }
 
   void rotateR() {
-    Node* pivot = left;
-    Node* old_parent = parent;
+    AVLNode* pivot = left;
+    AVLNode* old_parent = parent;
     bool is_right_child = isRightChild();
 
     joinNode(this, LEFT, pivot->right);
@@ -153,46 +153,46 @@ struct Node {
     rotate();
   }
 
-  Node** getNextDirection(const T& value) {
+  AVLNode** getNextDirection(const T& value) {
     return compare(value) ? &right : &left;
   }
 
-  Node* getMaxNode() {
-    Node* featured = this;
+  AVLNode* getMaxNode() {
+    AVLNode* featured = this;
     while (featured->right) {
       featured = featured->right;
     }
     return featured;
   }
 
-  Node* getMinNode() {
-    Node* featured = this;
+  AVLNode* getMinNode() {
+    AVLNode* featured = this;
     while (featured->left) {
       featured = featured->left;
     }
     return featured;
   }
 
-  Node* getNextNode() {
+  AVLNode* getNextNode() {
     if (right) {
       return right->getMinNode();
     } else if (!isRightChild()) {
       return parent;
     }
-    Node* featured = parent;
+    AVLNode* featured = parent;
     while (featured->isRightChild()) {
       featured = featured->parent;
     }
     return featured->parent;
   }
 
-  Node* getPrevNode() {
+  AVLNode* getPrevNode() {
     if (left) {
       return left->getMaxNode();
     } else if (isRightChild()) {
       return parent;
     }
-    Node* featured = parent;
+    AVLNode* featured = parent;
     while (featured->parent->parent && !(featured->isRightChild())) {
       featured = featured->parent;
     }
@@ -205,7 +205,7 @@ struct Node {
 template <typename T>
 class AVLTree {
  private:
-  typedef Node<T> Node;
+  typedef AVLNode<T> Node;
   Node*& root;
   Node end;
 
