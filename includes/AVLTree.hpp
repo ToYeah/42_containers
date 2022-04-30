@@ -297,15 +297,6 @@ class AVLTree {
     balanceNode(featured);
   }
 
-  void printTree() {
-    if (!root) {
-      std::cout << "root is NULL." << std::endl;
-    } else {
-      std::cout << "-----------------------------------" << std::endl;
-      root->printTree();
-    }
-  }
-
   void printTreeGraph() {
     if (!root) {
       std::cout << "root is NULL." << std::endl;
