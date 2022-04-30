@@ -91,7 +91,7 @@ struct Node {
     return !(compare(value)) && !(Node(value).compare(data));
   }
 
-  void calcHeightAndBias() {
+  void updateNodeInfo() {
     int right_h = right ? right->height : 0;
     int left_h = left ? left->height : 0;
     height = 1;
@@ -142,9 +142,9 @@ struct Node {
     joinNode(this, RIGHT, pivot->left);
     joinNode(pivot, LEFT, this);
     joinNode(old_parent, is_right_child, pivot);
-    this->calcHeightAndBias();
-    pivot->calcHeightAndBias();
-    old_parent->calcHeightAndBias();
+    this->updateNodeInfo();
+    pivot->updateNodeInfo();
+    old_parent->updateNodeInfo();
   }
 
   void rotateR() {
@@ -155,13 +155,13 @@ struct Node {
     joinNode(this, LEFT, pivot->right);
     joinNode(pivot, RIGHT, this);
     joinNode(old_parent, is_right_child, pivot);
-    this->calcHeightAndBias();
-    pivot->calcHeightAndBias();
-    old_parent->calcHeightAndBias();
+    this->updateNodeInfo();
+    pivot->updateNodeInfo();
+    old_parent->updateNodeInfo();
   }
 
   void updateNode() {
-    calcHeightAndBias();
+    updateNodeInfo();
     rotate();
   }
 
