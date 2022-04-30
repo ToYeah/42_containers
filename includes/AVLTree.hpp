@@ -13,8 +13,11 @@
 namespace ft {
 
 template <class Key, class T, class Compare = std::less<Key>,
-          class Allocator = std::allocator<ft::pair<const Key, T>>>
+          class Allocator = std::allocator<pair<const Key, T>>>
 class AVLTree {
+ private:
+  typedef pair<const Key, T> value_type;
+
  private:
   struct AVLNode {
     T data;
