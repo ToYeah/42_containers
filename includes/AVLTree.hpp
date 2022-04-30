@@ -237,7 +237,12 @@ class AVLTree {
 
   AVLTree& operator=(const AVLTree& rhs) {
     if (this != &rhs) {
-      // copy Node;
+      Node* featured = rhs.root->getMinNode();
+
+      while (featured != &(rhs.end)) {
+        this->addNode(featured->data);
+        featured = featured->getNextNode();
+      }
     }
     return *this;
   }
