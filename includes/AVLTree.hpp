@@ -54,18 +54,6 @@ struct Node {
     return *this;
   }
 
-  void printTree() {
-    if (left) left->printTree();
-    std::cout << "data: " << data << std::endl;
-    std::cout << "height: " << height << std::endl;
-    std::cout << "bias: " << bias << std::endl;
-    if (left) std::cout << "left: " << left->data << std::endl;
-    if (right) std::cout << "right: " << right->data << std::endl;
-    if (parent) std::cout << "parent: " << parent->data << std::endl;
-    std::cout << "-----------------------------------" << std::endl;
-    if (right) right->printTree();
-  }
-
   void printTreeGraph() {
     if (left) left->printTreeGraph();
     std::cout << data << " [label=\"" << data << "\nbias: " << bias
@@ -98,9 +86,9 @@ struct Node {
     height += left_h > right_h ? left_h : right_h;
     bias = left_h - right_h;
 
-    size = 1;
     int right_s = right ? right->size : 0;
     int left_s = left ? left->size : 0;
+    size = 1;
     size += right_s + left_s;
   }
 
