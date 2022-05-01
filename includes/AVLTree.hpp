@@ -99,14 +99,14 @@ class AVLTree {
       size += right_s + left_s;
     }
 
-    void joinNode(AVLNode* parent, bool is_right_child, AVLNode* child) {
+    void joinNode(bool is_right_child, AVLNode* child) {
       if (is_right_child) {
-        parent->right = child;
+        right = child;
       } else {
-        parent->left = child;
+        left = child;
       }
       if (child) {
-        child->parent = parent;
+        child->parent = this;
       }
     }
 
@@ -134,9 +134,9 @@ class AVLTree {
       AVLNode* old_parent = parent;
       bool is_right_child = isRightChild();
 
-      joinNode(this, RIGHT, pivot->left);
-      joinNode(pivot, LEFT, this);
-      joinNode(old_parent, is_right_child, pivot);
+      this->joinNode(RIGHT, pivot->left);
+      pivot->joinNode(LEFT, this);
+      old_parent->joinNode(is_right_child, pivot);
       this->updateNodeInfo();
       pivot->updateNodeInfo();
       old_parent->updateNodeInfo();
@@ -147,9 +147,9 @@ class AVLTree {
       AVLNode* old_parent = parent;
       bool is_right_child = isRightChild();
 
-      joinNode(this, LEFT, pivot->right);
-      joinNode(pivot, RIGHT, this);
-      joinNode(old_parent, is_right_child, pivot);
+      this->joinNode(LEFT, pivot->right);
+      pivot->joinNode(RIGHT, this);
+      old_parent->joinNode(is_right_child, pivot);
       this->updateNodeInfo();
       pivot->updateNodeInfo();
       old_parent->updateNodeInfo();
@@ -294,7 +294,7 @@ class AVLTree {
       featured = deleteTarget->parent;
       target->data = deleteTarget->data;
     } else if (target->right) {
-      target->joinNode(target->parent, target->isRightChild(), target->right);
+      target->parent->joinNode(target->isRightChild(), target->right);
       deleteTarget->parent = NULL;
     }
 
