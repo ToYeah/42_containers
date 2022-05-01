@@ -274,7 +274,7 @@ class AVLTree {
     balanceNode(featured);
   }
 
-  Node* findNode(const Key& key, const T& value) {
+  Node* findNode(const Key& key) {
     Node* featured = root;
     while (featured && !featured->equal(key)) {
       featured = *(featured->getNextDirection(key));
@@ -282,8 +282,8 @@ class AVLTree {
     return featured;
   }
 
-  void deleteNode(const T& value) {
-    Node* target = findNode(value);
+  void deleteNode(const Key& key) {
+    Node* target = findNode(key);
     if (!target) return;
 
     Node* deleteTarget = target;
