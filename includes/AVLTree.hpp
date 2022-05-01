@@ -109,6 +109,15 @@ class AVLTree {
         child->parent = this;
       }
     }
+    void substituteNode(AVLNode* src) {
+      parent->joinNode(isRightChild(), src);
+      src->joinNode(RIGHT, right);
+      src->joinNode(LEFT, left);
+
+      parent = NULL;
+      right = NULL;
+      left = NULL;
+    }
 
     void rotate() {
       if (bias > 1) {
@@ -287,18 +296,26 @@ class AVLTree {
     if (!target) return;
 
     Node* deleteTarget = target;
-    Node* featured = deleteTarget->parent;
+    Node* featured = target->parent;
 
     if (target->left) {
-      deleteTarget = target->left->getMaxNode();
-      featured = deleteTarget->parent;
-      target->data = deleteTarget->data;
+      Node* substitute_src = target->left->getMaxNode();
+
+      Node* substitute_dst = new Node(*substitute_src);
+      target->substituteNode(substitute_dst);
+
+      featured = substitute_src->parent;
+      substitute_src->parent->joinNode(substitute_src->isRightChild(),
+                                       substitute_src->left);
+
+      delete substitute_src;
+
     } else if (target->right) {
       target->parent->joinNode(target->isRightChild(), target->right);
-      deleteTarget->parent = NULL;
+      target->parent = NULL;
     }
 
-    delete deleteTarget;
+    delete target;
     balanceNode(featured);
   }
 
