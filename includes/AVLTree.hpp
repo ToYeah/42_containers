@@ -36,7 +36,7 @@ class AVLTree {
           size(1),
           bias(0) {}
 
-    AVLNode(const AVLNode& src) { *this = src; }
+    AVLNode(const AVLNode& src) : data(value_type(src.data)) { *this = src; }
 
     ~AVLNode() {
       if (parent) {
