@@ -16,11 +16,10 @@ template <class Key, class T, class Compare = std::less<Key>,
           class Allocator = std::allocator<pair<const Key, T>>>
 class AVLTree {
  private:
-  typedef pair<const Key, T> value_type;
+  typedef pair<Key, T> value_type;
 
- private:
   struct AVLNode {
-    T data;
+    value_type data;
     AVLNode* left;
     AVLNode* right;
     AVLNode* parent;
@@ -28,8 +27,8 @@ class AVLTree {
     int bias;
     int size;
 
-    AVLNode(const T& value = T(), AVLNode* parent = NULL)
-        : data(value),
+    AVLNode(const Key& key, const T& value = T(), AVLNode* parent = NULL)
+        : data(value_type(key, value)),
           left(NULL),
           right(NULL),
           parent(parent),
@@ -64,27 +63,27 @@ class AVLTree {
 
     void printTreeGraph() {
       if (left) left->printTreeGraph();
-      std::cout << data << " [label=\"" << data << "\nbias: " << bias
-                << "\nheight: " << height << "\nsize: " << size << "\"]"
+      std::cout << data.first << " [label=\""
+                << "key: " << data.first << "\nvalue: " << data.second << "\"]"
                 << std::endl;
       if (left) {
-        std::cout << data << "->" << left->data << " [color = blue];"
-                  << std::endl;
+        std::cout << data.first << "->" << left->data.first
+                  << " [color = blue];" << std::endl;
       }
       if (right) {
-        std::cout << data << "->" << right->data << " [color = red];"
-                  << std::endl;
+        std::cout << data.first << "->" << right->data.first
+                  << " [color = red];" << std::endl;
       }
       if (right) right->printTreeGraph();
     }
 
-    bool compare(const T& value) {
-      if (data < value) return true;
+    bool compare(const Key& key) {
+      if (Compare()(data.first, key)) return true;
       return false;
     }
 
-    bool equal(const T& value) {
-      return !(compare(value)) && !(AVLNode(value).compare(data));
+    bool equal(const Key& key) {
+      return !(compare(key)) && !(AVLNode(key).compare(data.first));
     }
 
     void updateNodeInfo() {
@@ -161,8 +160,8 @@ class AVLTree {
       rotate();
     }
 
-    AVLNode** getNextDirection(const T& value) {
-      return compare(value) ? &right : &left;
+    AVLNode** getNextDirection(const Key& key) {
+      return compare(key) ? &right : &left;
     }
 
     AVLNode* getMaxNode() {
@@ -216,7 +215,7 @@ class AVLTree {
   Node end;
 
  public:
-  AVLTree() : root(end.left){};
+  AVLTree() : end(Node("end")), root(end.left){};
 
   AVLTree(const AVLTree& src) : root(end.left) { *this = src; };
 
@@ -256,29 +255,29 @@ class AVLTree {
     }
   }
 
-  void addNode(const T& value) {
+  void addNode(const Key& key, const T& value) {
     if (!root) {
-      root = new Node(value, &end);
+      root = new Node(key, value, &end);
       return;
     }
 
     Node* featured = root;
     Node** target = NULL;
     while (1) {
-      target = featured->getNextDirection(value);
+      target = featured->getNextDirection(key);
       if (*target == NULL) break;
       featured = *target;
     }
 
-    *target = new Node(value, featured);
+    *target = new Node(key, value, featured);
 
     balanceNode(featured);
   }
 
-  Node* findNode(const T& value) {
+  Node* findNode(const Key& key, const T& value) {
     Node* featured = root;
-    while (featured && !featured->equal(value)) {
-      featured = *(featured->getNextDirection(value));
+    while (featured && !featured->equal(key)) {
+      featured = *(featured->getNextDirection(key));
     }
     return featured;
   }
