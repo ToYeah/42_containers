@@ -5,6 +5,7 @@
 #include <functional>
 #include <iostream>
 
+#include "iterator.hpp"
 #include "pair.hpp"
 
 #define RIGHT true
@@ -221,6 +222,27 @@ class AVLTree {
   typedef AVLNode Node;
   typedef typename Allocator::template rebind<Node>::other NodeAllcator;
 
+ public:
+  class tree_iterator : public iterator<std::bidirectional_iterator_tag, Node> {
+   private:
+    typedef Node* pointer;
+
+   private:
+    pointer current_node_;
+
+   public:
+    tree_iterator() : current_node_(NULL){};
+    tree_iterator(const tree_iterator& src) { *this = src; };
+    ~tree_iterator(){};
+    tree_iterator& operator=(const tree_iterator& rhs) {
+      if (this != &rhs) {
+        current_node_ = rhs.current_node_;
+      }
+      return *this;
+    }
+  };
+
+ private:
   Node*& root;
   Node end;
   NodeAllcator allocator;
