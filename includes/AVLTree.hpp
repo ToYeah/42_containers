@@ -217,6 +217,8 @@ class AVLTree {
     bool isRightChild() { return this->parent->right == this ? true : false; }
   };
 
+  typedef typename Allocator::template rebind<AVLNode>::other node_allocator;
+
  private:
   typedef AVLNode Node;
   Node*& root;
