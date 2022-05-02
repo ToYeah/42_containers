@@ -16,7 +16,7 @@ template <class Key, class T, class Compare = std::less<Key>,
           class Allocator = std::allocator<pair<const Key, T>>>
 class AVLTree {
  private:
-  typedef pair<Key, T> value_type;
+  typedef pair<const Key, T> value_type;
 
   struct AVLNode {
     value_type data;
@@ -50,7 +50,6 @@ class AVLTree {
 
     AVLNode& operator=(const AVLNode& rhs) {
       if (this != &rhs) {
-        data = rhs.data;
         left = rhs.left;
         right = rhs.right;
         parent = rhs.parent;
