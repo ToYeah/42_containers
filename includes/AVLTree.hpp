@@ -217,12 +217,13 @@ class AVLTree {
     bool isRightChild() { return this->parent->right == this ? true : false; }
   };
 
-  typedef typename Allocator::template rebind<AVLNode>::other node_allocator;
-
  private:
   typedef AVLNode Node;
+  typedef typename Allocator::template rebind<Node>::other NodeAllcator;
+
   Node*& root;
   Node end;
+  NodeAllcator allocator;
 
  public:
   AVLTree() : end(Node("end")), root(end.left){};
@@ -267,7 +268,7 @@ class AVLTree {
 
   void addNode(const Key& key, const T& value) {
     if (!root) {
-      root = new Node(key, value, &end);
+      root = allocateNode(key, value, &end);
       return;
     }
 
@@ -279,7 +280,7 @@ class AVLTree {
       featured = *target;
     }
 
-    *target = new Node(key, value, featured);
+    *target = allocateNode(key, value, featured);
 
     balanceNode(featured);
   }
@@ -302,7 +303,7 @@ class AVLTree {
     if (target->left) {
       Node* substitute_src = target->left->getMaxNode();
 
-      Node* substitute_dst = new Node(*substitute_src);
+      Node* substitute_dst = allocateNode(*substitute_src);
       target->substituteNode(substitute_dst);
 
       featured = substitute_src->parent;
@@ -328,6 +329,23 @@ class AVLTree {
       root->printTreeGraph();
       std::cout << "}" << std::endl;
     }
+  }
+
+  Node* allocateNode(const Key& key, const T& value = T(),
+                     Node* parent = NULL) {
+    Node* res = NULL;
+
+    res = allocator.allocate(1);
+    allocator.construct(res, key, value, parent);
+    return res;
+  }
+
+  Node* allocateNode(const AVLNode& src) {
+    Node* res = NULL;
+
+    res = allocator.allocate(1);
+    allocator.construct(res, src);
+    return res;
   }
 };
 
