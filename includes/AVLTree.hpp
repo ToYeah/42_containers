@@ -241,6 +241,7 @@ class AVLTree {
 
    public:
     tree_iterator() : current_node_(NULL){};
+    explicit tree_iterator(Node* ptr) : current_node_(ptr) {}
     tree_iterator(const tree_iterator& src) { *this = src; };
     ~tree_iterator(){};
     tree_iterator& operator=(const tree_iterator& rhs) {
