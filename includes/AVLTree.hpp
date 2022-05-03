@@ -425,6 +425,7 @@ class AVLTree {
     return res;
   }
 
+ public:
   pair<iterator, bool> insertNode(const value_type& pair) {
     Node* node = findNode(pair.first);
     if (node) {
@@ -434,6 +435,13 @@ class AVLTree {
       return make_pair(iterator(res), true);
     }
   }
+
+  iterator getBeginIterator() {
+    Node* node = root ? root->getMinNode() : NULL;
+    return iterator(node);
+  }
+
+  iterator getEndIterator() { return iterator(&end); }
 };
 
 }  // namespace ft

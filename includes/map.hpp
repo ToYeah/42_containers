@@ -60,6 +60,10 @@ class map {
   pair<iterator, bool> insert(const value_type& value) {
     return tree.insertNode(value);
   }
+
+  iterator begin() { return tree.getBeginIterator(); };
+
+  iterator end() { return tree.getEndIterator(); };
 };
 
 }  // namespace ft
