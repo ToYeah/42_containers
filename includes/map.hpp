@@ -61,6 +61,13 @@ class map {
     return tree.insertNode(value);
   }
 
+  template <class InputIt>
+  void insert(InputIt first, InputIt last) {
+    for (InputIt it = first; it != last; it++) {
+      tree.insertNode(*it);
+    }
+  }
+
   iterator begin() { return tree.getBeginIterator(); };
 
   iterator end() { return tree.getEndIterator(); };
