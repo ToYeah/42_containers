@@ -224,9 +224,10 @@ class AVLTree {
   typedef typename Allocator::template rebind<Node>::other NodeAllcator;
 
  public:
-  class tree_iterator : public iterator<std::bidirectional_iterator_tag, Node> {
+  class tree_iterator
+      : public iterator<std::bidirectional_iterator_tag, value_type> {
    private:
-    typedef iterator<std::bidirectional_iterator_tag, Node> iterator_type;
+    typedef iterator<std::bidirectional_iterator_tag, value_type> iterator_type;
 
    public:
     typedef typename iterator_type::value_type value_type;
@@ -236,7 +237,7 @@ class AVLTree {
     typedef typename iterator_type::iterator_category iterator_category;
 
    private:
-    pointer current_node_;
+    Node* current_node_;
 
    public:
     tree_iterator() : current_node_(NULL){};
@@ -248,6 +249,32 @@ class AVLTree {
       }
       return *this;
     }
+
+    tree_iterator& operator++() {
+      current_node_ = current_node_->getNextNode();
+      return *this;
+    }
+
+    tree_iterator operator++(int) {
+      tree_iterator tmp = *this;
+      current_node_ = current_node_->getNextNode();
+      return tmp;
+    }
+
+    tree_iterator& operator--() {
+      current_node_ = current_node_->getPrevNode();
+      return *this;
+    }
+
+    tree_iterator operator--(int) {
+      tree_iterator tmp = *this;
+      current_node_ = current_node_->getPrevNode();
+      return tmp;
+    }
+
+    reference operator*() const { return current_node_->data; }
+
+    pointer operator->() const { return &(operator*()); };
   };
 
  private:
