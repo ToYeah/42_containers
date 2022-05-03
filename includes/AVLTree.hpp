@@ -287,6 +287,9 @@ class AVLTree {
   };
 
  private:
+  typedef tree_iterator iterator;
+
+ private:
   Node*& root;
   Node end;
   NodeAllcator allocator;
@@ -339,10 +342,10 @@ class AVLTree {
     }
   }
 
-  void addNode(const Key& key, const T& value) {
+  Node* addNode(const Key& key, const T& value) {
     if (!root) {
       root = allocateNode(key, value, &end);
-      return;
+      return root;
     }
 
     Node* featured = root;
@@ -356,6 +359,7 @@ class AVLTree {
     *target = allocateNode(key, value, featured);
 
     balanceNode(featured);
+    return *target;
   }
 
   Node* findNode(const Key& key) {
@@ -419,6 +423,16 @@ class AVLTree {
     res = allocator.allocate(1);
     allocator.construct(res, src);
     return res;
+  }
+
+  pair<iterator, bool> insertNode(const value_type& pair) {
+    Node* node = findNode(pair.first);
+    if (node) {
+      return make_pair(iterator(node), false);
+    } else {
+      Node* res = addNode(pair.first, pair.second);
+      return make_pair(iterator(res), true);
+    }
   }
 };
 

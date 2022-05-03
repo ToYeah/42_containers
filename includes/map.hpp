@@ -56,6 +56,10 @@ class map {
       const allocator_type& alloc = allocator_type());
 
   map(const map& x);
+
+  pair<iterator, bool> insert(const value_type& value) {
+    return tree.insertNode(value);
+  }
 };
 
 }  // namespace ft
