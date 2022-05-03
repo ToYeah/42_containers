@@ -290,11 +290,18 @@ class AVLTree {
   Node*& root;
   Node end;
   NodeAllcator allocator;
+  Compare comp;
 
  public:
-  AVLTree() : end(Node("end")), root(end.left){};
+  AVLTree(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
+      : end(Node(Key())),
+        root(end.left),
+        allocator(NodeAllcator(alloc)),
+        comp(comp){};
 
-  AVLTree(const AVLTree& src) : root(end.left) { *this = src; };
+  AVLTree(const AVLTree& src) : end(Node(Key())), root(end.left) {
+    *this = src;
+  };
 
   ~AVLTree() {
     if (root == NULL) return;
@@ -318,7 +325,7 @@ class AVLTree {
       Node* featured = rhs.root->getMinNode();
 
       while (featured != &(rhs.end)) {
-        this->addNode(featured->data);
+        this->addNode(featured->data.first, featured->data.second);
         featured = featured->getNextNode();
       }
     }

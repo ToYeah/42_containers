@@ -47,7 +47,8 @@ class map {
 
  public:
   explicit map(const key_compare& comp = key_compare(),
-               const allocator_type& alloc = allocator_type()) {}
+               const allocator_type& alloc = allocator_type())
+      : tree(avl_tree(comp, alloc)) {}
 
   template <class InputIterator>
   map(InputIterator first, InputIterator last,
