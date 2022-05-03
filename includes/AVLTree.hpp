@@ -325,6 +325,9 @@ class AVLTree {
 
   AVLTree& operator=(const AVLTree& rhs) {
     if (this != &rhs) {
+      allocator = rhs.allocator;
+      comp = rhs.comp;
+
       Node* featured = rhs.root->getMinNode();
 
       while (featured != &(rhs.end)) {

@@ -53,9 +53,21 @@ class map {
   template <class InputIterator>
   map(InputIterator first, InputIterator last,
       const key_compare& comp = key_compare(),
-      const allocator_type& alloc = allocator_type());
+      const allocator_type& alloc = allocator_type())
+      : tree(avl_tree(comp, alloc)) {
+    insert(first, last);
+  };
 
-  map(const map& x);
+  map(const map& src) { *this = src; };
+
+  ~map(){};
+
+  map& operator=(const map& rhs) {
+    if (this != &rhs) {
+      tree = rhs.tree;
+    }
+    return *this;
+  };
 
   pair<iterator, bool> insert(const value_type& value) {
     return tree.insertNode(value);
