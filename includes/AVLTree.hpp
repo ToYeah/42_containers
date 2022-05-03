@@ -272,6 +272,14 @@ class AVLTree {
       return tmp;
     }
 
+    bool operator==(const tree_iterator& rhs) const {
+      return current_node_ == rhs.current_node_;
+    }
+
+    bool operator!=(const tree_iterator& rhs) const {
+      return current_node_ != rhs.current_node_;
+    }
+
     reference operator*() const { return current_node_->data; }
 
     pointer operator->() const { return &(operator*()); };
