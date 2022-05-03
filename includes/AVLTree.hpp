@@ -28,7 +28,8 @@ class AVLTree {
     int bias;
     int size;
 
-    AVLNode(const Key& key, const T& value = T(), AVLNode* parent = NULL)
+    explicit AVLNode(const Key& key, const T& value = T(),
+                     AVLNode* parent = NULL)
         : data(value_type(key, value)),
           left(NULL),
           right(NULL),
