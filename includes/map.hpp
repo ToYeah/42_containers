@@ -44,17 +44,18 @@ class map {
 
  public:
   avl_tree tree;
+  allocator_type allocator_;
 
  public:
   explicit map(const key_compare& comp = key_compare(),
                const allocator_type& alloc = allocator_type())
-      : tree(avl_tree(comp, alloc)) {}
+      : tree(avl_tree(comp, alloc)), allocator_(alloc) {}
 
   template <class InputIterator>
   map(InputIterator first, InputIterator last,
       const key_compare& comp = key_compare(),
       const allocator_type& alloc = allocator_type())
-      : tree(avl_tree(comp, alloc)) {
+      : tree(avl_tree(comp, alloc)), allocator_(alloc) {
     insert(first, last);
   };
 
@@ -65,9 +66,12 @@ class map {
   map& operator=(const map& rhs) {
     if (this != &rhs) {
       tree = rhs.tree;
+      allocator_ = rhs.allocator_;
     }
     return *this;
   };
+
+  allocator_type get_allocator() const { return allocator_; };
 
   pair<iterator, bool> insert(const value_type& value) {
     return tree.insertNode(value);
