@@ -225,7 +225,14 @@ class AVLTree {
  public:
   class tree_iterator : public iterator<std::bidirectional_iterator_tag, Node> {
    private:
-    typedef Node* pointer;
+    typedef iterator<std::bidirectional_iterator_tag, Node> iterator_type;
+
+   public:
+    typedef typename iterator_type::value_type value_type;
+    typedef typename iterator_type::difference_type difference_type;
+    typedef typename iterator_type::pointer pointer;
+    typedef typename iterator_type::reference reference;
+    typedef typename iterator_type::iterator_category iterator_category;
 
    private:
     pointer current_node_;
