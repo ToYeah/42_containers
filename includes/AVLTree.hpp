@@ -224,10 +224,11 @@ class AVLTree {
   typedef typename Allocator::template rebind<Node>::other NodeAllcator;
 
  public:
+  template <class value>
   class tree_iterator
-      : public iterator<std::bidirectional_iterator_tag, value_type> {
+      : public iterator<std::bidirectional_iterator_tag, value> {
    private:
-    typedef iterator<std::bidirectional_iterator_tag, value_type> iterator_type;
+    typedef iterator<std::bidirectional_iterator_tag, value> iterator_type;
 
    public:
     typedef typename iterator_type::value_type value_type;
@@ -287,7 +288,8 @@ class AVLTree {
   };
 
  private:
-  typedef tree_iterator iterator;
+  typedef tree_iterator<value_type> iterator;
+  typedef tree_iterator<const value_type> const_iterator;
 
  private:
   Node*& root;
@@ -444,7 +446,17 @@ class AVLTree {
     return iterator(node);
   }
 
+  const_iterator getBeginIterator() const {
+    Node* node = root ? root->getMinNode() : NULL;
+    return const_iterator(node);
+  }
+
   iterator getEndIterator() { return iterator(&end); }
+
+  const_iterator getEndIterator() const {
+    Node* a = &end;
+    return const_iterator(NULL);
+  }
 };
 
 }  // namespace ft

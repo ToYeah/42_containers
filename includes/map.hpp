@@ -26,7 +26,9 @@ class map {
   typedef typename allocator_type::const_reference const_reference;
   typedef typename allocator_type::pointer pointer;
   typedef typename allocator_type::const_pointer const_pointer;
-  typedef typename avl_tree::tree_iterator iterator;
+  typedef typename avl_tree::template tree_iterator<value_type> iterator;
+  typedef typename avl_tree::template tree_iterator<const value_type>
+      const_iterator;
   typedef reverse_iterator<iterator> reverse_iterator;
 
   class value_compare
@@ -85,8 +87,10 @@ class map {
   }
 
   iterator begin() { return tree.getBeginIterator(); };
+  const_iterator begin() const { return tree.getBeginIterator(); };
 
   iterator end() { return tree.getEndIterator(); };
+  const_iterator end() const { return tree.getEndIterator(); };
 };
 
 }  // namespace ft
