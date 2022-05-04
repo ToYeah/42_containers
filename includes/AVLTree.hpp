@@ -457,6 +457,14 @@ class AVLTree {
   iterator getEndIterator() { return iterator(end_ptr); }
 
   const_iterator getEndIterator() const { return const_iterator(end_ptr); }
+
+  bool isEmpty() const { return root == NULL; }
+
+  size_t size() const {
+    size_t res = 0;
+    if (!isEmpty()) res = root->size;
+    return res;
+  }
 };
 
 }  // namespace ft
