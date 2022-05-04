@@ -465,6 +465,10 @@ class AVLTree {
     if (!isEmpty()) res = root->size;
     return res;
   }
+
+  typename NodeAllcator::size_type getMaxSize() const {
+    return allocator.max_size();
+  }
 };
 
 }  // namespace ft

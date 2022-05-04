@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include <functional>
+#include <limits>
 
 #include "AVLTree.hpp"
 #include "reverse_iterator.hpp"
@@ -106,6 +107,11 @@ class map {
   bool empty() const { return tree.isEmpty(); };
 
   size_type size() const { return tree.size(); };
+
+  size_type max_size() const {
+    return std::min<size_type>(std::numeric_limits<difference_type>::max(),
+                               tree.getMaxSize());
+  };
 };
 
 }  // namespace ft
