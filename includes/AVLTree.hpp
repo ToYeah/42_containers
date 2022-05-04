@@ -294,17 +294,20 @@ class AVLTree {
  private:
   Node*& root;
   Node end;
+  Node* end_ptr;
   NodeAllcator allocator;
   Compare comp;
 
  public:
   AVLTree(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
       : end(Node(Key())),
+        end_ptr(&end),
         root(end.left),
         allocator(NodeAllcator(alloc)),
         comp(comp){};
 
-  AVLTree(const AVLTree& src) : end(Node(Key())), root(end.left) {
+  AVLTree(const AVLTree& src)
+      : end(Node(Key())), end_ptr(&end), root(end.left) {
     *this = src;
   };
 
@@ -451,12 +454,9 @@ class AVLTree {
     return const_iterator(node);
   }
 
-  iterator getEndIterator() { return iterator(&end); }
+  iterator getEndIterator() { return iterator(end_ptr); }
 
-  const_iterator getEndIterator() const {
-    Node* a = &end;
-    return const_iterator(NULL);
-  }
+  const_iterator getEndIterator() const { return const_iterator(end_ptr); }
 };
 
 }  // namespace ft
