@@ -311,22 +311,7 @@ class AVLTree {
     *this = src;
   };
 
-  ~AVLTree() {
-    if (root == NULL) return;
-
-    Node* featured = root->getMinNode();
-    while (featured != &end) {
-      if (featured->left)
-        featured = featured->left;
-      else if (featured->right)
-        featured = featured->right;
-      else {
-        Node* tmp = featured;
-        featured = featured->parent;
-        delete tmp;
-      }
-    }
-  };
+  ~AVLTree() { clearTree(); };
 
   AVLTree& operator=(const AVLTree& rhs) {
     if (this != &rhs) {
@@ -486,6 +471,23 @@ class AVLTree {
       return const_iterator(end_ptr);
     else
       return const_iterator(res);
+  }
+
+  void clearTree() {
+    if (root == NULL) return;
+
+    Node* featured = root->getMinNode();
+    while (featured != &end) {
+      if (featured->left)
+        featured = featured->left;
+      else if (featured->right)
+        featured = featured->right;
+      else {
+        Node* tmp = featured;
+        featured = featured->parent;
+        delete tmp;
+      }
+    }
   }
 };
 

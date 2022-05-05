@@ -124,6 +124,8 @@ class map {
   iterator find(const key_type& k) { return tree.findData(k); }
 
   const_iterator find(const key_type& k) const { return tree.findData(k); };
+
+  void clear() { tree.clearTree(); };
 };
 
 }  // namespace ft
