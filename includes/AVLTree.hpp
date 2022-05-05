@@ -470,13 +470,22 @@ class AVLTree {
     return allocator.max_size();
   }
 
-  iterator findData(const Key& key) const {
+  iterator findData(const Key& key) {
     Node* res = NULL;
     res = findNode(key);
     if (res == NULL)
       return iterator(end_ptr);
     else
       return iterator(res);
+  }
+
+  const_iterator findData(const Key& key) const {
+    Node* res = NULL;
+    res = findNode(key);
+    if (res == NULL)
+      return const_iterator(end_ptr);
+    else
+      return const_iterator(res);
   }
 };
 

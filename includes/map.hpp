@@ -120,6 +120,10 @@ class map {
     }
     return (*it).second;
   };
+
+  iterator find(const key_type& k) { return tree.findData(k); }
+
+  const_iterator find(const key_type& k) const { return tree.findData(k); };
 };
 
 }  // namespace ft
