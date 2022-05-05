@@ -10,7 +10,7 @@
 namespace ft {
 
 template <class Key, class T, class Compare = std::less<Key>,
-          class Allocator = std::allocator<pair<const Key, T>>>
+          class Allocator = std::allocator<pair<const Key, T> > >
 class map {
  private:
   typedef AVLTree<Key, T, Compare, Allocator> avl_tree;
