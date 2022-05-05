@@ -25,8 +25,8 @@ class AVLTree {
     AVLNode* right;
     AVLNode* parent;
     int height;
-    int bias;
     int size;
+    int bias;
 
     explicit AVLNode(const Key& key, const T& value = T(),
                      AVLNode* parent = NULL)
@@ -292,9 +292,9 @@ class AVLTree {
   typedef tree_iterator<const value_type> const_iterator;
 
  private:
-  Node*& root;
   Node end;
   Node* end_ptr;
+  Node*& root;
   NodeAllcator allocator;
   Compare comp;
 
@@ -429,14 +429,10 @@ class AVLTree {
     }
   }
 
-  iterator getBeginIterator() {
-    Node* node = root ? root->getMinNode() : NULL;
-    return iterator(node);
-  }
+  iterator getBeginIterator() { return iterator(end_ptr->getMinNode()); }
 
   const_iterator getBeginIterator() const {
-    Node* node = root ? root->getMinNode() : NULL;
-    return const_iterator(node);
+    return const_iterator(end_ptr->getMinNode());
   }
 
   iterator getEndIterator() { return iterator(end_ptr); }
