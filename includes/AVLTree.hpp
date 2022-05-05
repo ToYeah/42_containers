@@ -370,7 +370,7 @@ class AVLTree {
     return *target;
   }
 
-  Node* findNode(const Key& key) {
+  Node* findNode(const Key& key) const {
     Node* featured = root;
     while (featured && !featured->equal(key)) {
       featured = *(featured->getNextDirection(key));
@@ -468,6 +468,15 @@ class AVLTree {
 
   typename NodeAllcator::size_type getMaxSize() const {
     return allocator.max_size();
+  }
+
+  iterator findData(const Key& key) const {
+    Node* res = NULL;
+    res = findNode(key);
+    if (res == NULL)
+      return iterator(end_ptr);
+    else
+      return iterator(res);
   }
 };
 

@@ -112,6 +112,14 @@ class map {
     return std::min<size_type>(std::numeric_limits<difference_type>::max(),
                                tree.getMaxSize());
   };
+
+  mapped_type& operator[](const key_type& k) {
+    iterator it = tree.findData(k);
+    if (it == end()) {
+      it = insert(make_pair(k, mapped_type())).first;
+    }
+    return (*it).second;
+  };
 };
 
 }  // namespace ft
