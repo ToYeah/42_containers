@@ -118,7 +118,7 @@ class map {
   mapped_type& operator[](const key_type& k) {
     iterator it = tree.findData(k);
     if (it == end()) {
-      it = insert(make_pair(k, mapped_type())).first;
+      it = insert(ft::make_pair(k, mapped_type())).first;
     }
     return (*it).second;
   };

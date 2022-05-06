@@ -394,10 +394,10 @@ class AVLTree {
   pair<iterator, bool> insertNode(const value_type& pair) {
     Node* node = findNode(pair.first);
     if (node) {
-      return make_pair(iterator(node), false);
+      return ft::make_pair(iterator(node), false);
     } else {
       Node* res = addNode(pair.first, pair.second);
-      return make_pair(iterator(res), true);
+      return ft::make_pair(iterator(res), true);
     }
   }
 
@@ -464,7 +464,6 @@ class AVLTree {
       return false;
     }
 
-    Node* deleteTarget = target;
     Node* featured = target->parent;
 
     if (target->left) {
