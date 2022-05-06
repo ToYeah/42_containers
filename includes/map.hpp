@@ -150,7 +150,15 @@ class map {
   }
 
   key_compare key_comp() const { return key_compare(); }
+
   value_compare value_comp() const { return value_compare(); }
+
+  size_type count(const key_type& k) const {
+    if (tree.findNode(k) != NULL) {
+      return 1;
+    }
+    return 0;
+  }
 };
 
 }  // namespace ft
