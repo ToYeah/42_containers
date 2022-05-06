@@ -363,34 +363,6 @@ class AVLTree {
     return featured;
   }
 
-  void deleteNode(const Key& key) {
-    Node* target = findNode(key);
-    if (!target) return;
-
-    Node* deleteTarget = target;
-    Node* featured = target->parent;
-
-    if (target->left) {
-      Node* substitute_src = target->left->getMaxNode();
-
-      Node* substitute_dst = allocateNode(*substitute_src);
-      target->substituteNode(substitute_dst);
-
-      featured = substitute_src->parent;
-      substitute_src->parent->joinNode(substitute_src->isRightChild(),
-                                       substitute_src->left);
-
-      delete substitute_src;
-
-    } else if (target->right) {
-      target->parent->joinNode(target->isRightChild(), target->right);
-      target->parent = NULL;
-    }
-
-    delete target;
-    balanceNode(featured);
-  }
-
   void printTreeGraph() {
     if (!root) {
       std::cout << "root is NULL." << std::endl;
@@ -484,6 +456,37 @@ class AVLTree {
         delete tmp;
       }
     }
+  }
+
+  bool deleteNode(const Key& key) {
+    Node* target = findNode(key);
+    if (!target) {
+      return false;
+    }
+
+    Node* deleteTarget = target;
+    Node* featured = target->parent;
+
+    if (target->left) {
+      Node* substitute_src = target->left->getMaxNode();
+
+      Node* substitute_dst = allocateNode(*substitute_src);
+      target->substituteNode(substitute_dst);
+
+      featured = substitute_src->parent;
+      substitute_src->parent->joinNode(substitute_src->isRightChild(),
+                                       substitute_src->left);
+
+      delete substitute_src;
+
+    } else if (target->right) {
+      target->parent->joinNode(target->isRightChild(), target->right);
+      target->parent = NULL;
+    }
+
+    delete target;
+    balanceNode(featured);
+    return true;
   }
 };
 

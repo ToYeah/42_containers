@@ -126,6 +126,21 @@ class map {
   const_iterator find(const key_type& k) const { return tree.findData(k); };
 
   void clear() { tree.clearTree(); };
+
+  void erase(iterator position) { tree.deleteNode((*position).first); };
+
+  size_type erase(const key_type& k) {
+    if (tree.deleteNode(k)) {
+      return 1;
+    }
+    return 0;
+  };
+
+  void erase(iterator first, iterator last) {
+    for (iterator it = first; it != last; it++) {
+      erase(it);
+    }
+  }
 };
 
 }  // namespace ft
