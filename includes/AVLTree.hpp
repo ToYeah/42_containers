@@ -395,6 +395,10 @@ class AVLTree {
     return res;
   }
 
+  bool nodeRangeComp(Node* first, Node* second, const Key key) {
+    return first->compare(key) && Node(key).compare(second->data.first);
+  }
+
  public:
   pair<iterator, bool> insertNode(const value_type& pair) {
     Node* node = findNode(pair.first);
@@ -404,6 +408,39 @@ class AVLTree {
       Node* res = addNode(pair.first, pair.second);
       return ft::make_pair(iterator(res), true);
     }
+  }
+
+  iterator insertNodeWithHint(iterator hint, const value_type& val) {
+    iterator res = getEndIterator();
+    Node** target = NULL;
+
+    if (hint != getBeginIterator()) {
+      iterator prev = hint;
+      prev--;
+
+      if (nodeRangeComp(prev.baseNode(), hint.baseNode(), val.first) &&
+          hint.baseNode()->left == NULL) {
+        target = &(hint.baseNode()->left);
+      }
+    }
+
+    if (hint != getEndIterator() && hint.baseNode() != root->getMaxNode()) {
+      iterator next = hint;
+      next++;
+
+      if (nodeRangeComp(hint.baseNode(), next.baseNode(), val.first) &&
+          hint.baseNode()->right == NULL) {
+        target = &(hint.baseNode()->left);
+      }
+    }
+
+    if (target != NULL) {
+      *target = allocateNode(val.first, val.second, hint.baseNode());
+      balanceNode(hint.baseNode());
+      res = iterator(*target);
+    }
+
+    return res;
   }
 
   iterator getBeginIterator() { return iterator(end_ptr->getMinNode()); }

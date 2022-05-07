@@ -89,6 +89,16 @@ class map {
     return tree.insertNode(value);
   }
 
+  iterator insert(iterator position, const value_type& val) {
+    iterator res = find(val.first);
+    if (res != end()) return res;
+
+    res = tree.insertNodeWithHint(position, val);
+    if (res != end()) return res;
+
+    return (tree.insertNode(val)).first;
+  }
+
   template <class InputIt>
   void insert(InputIt first, InputIt last) {
     for (InputIt it = first; it != last; it++) {
