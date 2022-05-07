@@ -159,6 +159,28 @@ class map {
     }
     return 0;
   }
+
+  iterator lower_bound(const key_type& k) {
+    return iterator(tree.findLowerBoundNode(k));
+  }
+  const_iterator lower_bound(const key_type& k) const {
+    return const_iterator(tree.findLowerBoundNode(k));
+  }
+  iterator upper_bound(const key_type& k) {
+    return iterator(tree.findUpperBoundNode(k));
+  }
+
+  const_iterator upper_bound(const key_type& k) const {
+    return const_iterator(tree.findUpperBoundNode(k));
+  }
+
+  pair<iterator, iterator> equal_range(const key_type& k) {
+    return ft::make_pair(lower_bound(k), upper_bound(k));
+  }
+
+  pair<const_iterator, const_iterator> equal_range(const key_type& k) const {
+    return ft::make_pair(lower_bound(k), upper_bound(k));
+  }
 };
 
 }  // namespace ft

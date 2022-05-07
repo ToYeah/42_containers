@@ -487,6 +487,41 @@ class AVLTree {
     balanceNode(featured);
     return true;
   }
+
+  Node* findLowerBoundNode(const Key& key) const {
+    Node* res = NULL;
+    Node* featured = root;
+
+    while (featured != NULL) {
+      if (!featured->compare(key)) {
+        res = featured;
+      }
+      if (featured->compare(key)) {
+        featured = featured->right;
+      } else {
+        featured = featured->left;
+      }
+    }
+    if (res == NULL) return end_ptr;
+    return res;
+  }
+
+  Node* findUpperBoundNode(const Key& key) const {
+    Node* res = NULL;
+    Node* featured = root;
+
+    while (featured != NULL) {
+      if (featured->compare(key)) {
+        res = featured;
+        featured = featured->right;
+      } else {
+        featured = featured->left;
+      }
+    }
+
+    if (res == NULL) return end_ptr;
+    return res;
+  }
 };
 
 }  // namespace ft
