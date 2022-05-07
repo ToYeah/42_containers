@@ -446,7 +446,9 @@ class AVLTree {
     Node* res = NULL;
 
     res = allocator.allocate(1);
-    allocator.construct(res, Node(key, value, parent));
+
+    allocator.construct(res, Node(key, value));
+    res->parent = parent;
     return res;
   }
 
