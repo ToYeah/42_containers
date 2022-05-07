@@ -386,6 +386,8 @@ class AVLTree {
       allocator = rhs.allocator;
       comp = rhs.comp;
 
+      clearTree();
+
       Node* featured = rhs.root->getMinNode();
 
       while (featured != &(rhs.end)) {
