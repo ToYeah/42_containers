@@ -619,9 +619,11 @@ class AVLTree {
 
     while (featured != NULL) {
       if (featured->compare(key)) {
-        res = featured;
         featured = featured->right;
       } else {
+        if (!featured->equal(key)) {
+          res = featured;
+        }
         featured = featured->left;
       }
     }
