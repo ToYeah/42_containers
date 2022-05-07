@@ -37,6 +37,8 @@ class map {
 
   class value_compare
       : public std::binary_function<value_type, value_type, bool> {
+    friend class map;
+
    protected:
     Compare comp;
     value_compare(Compare c) : comp(c) {}
@@ -53,17 +55,18 @@ class map {
  public:
   avl_tree tree;
   allocator_type allocator_;
+  Compare comp_;
 
  public:
   explicit map(const key_compare& comp = key_compare(),
                const allocator_type& alloc = allocator_type())
-      : tree(avl_tree(comp, alloc)), allocator_(alloc) {}
+      : tree(avl_tree(comp, alloc)), allocator_(alloc), comp_(comp) {}
 
   template <class InputIterator>
   map(InputIterator first, InputIterator last,
       const key_compare& comp = key_compare(),
       const allocator_type& alloc = allocator_type())
-      : tree(avl_tree(comp, alloc)), allocator_(alloc) {
+      : tree(avl_tree(comp, alloc)), allocator_(alloc), comp_(comp) {
     insert(first, last);
   };
 
@@ -75,6 +78,7 @@ class map {
     if (this != &rhs) {
       tree = rhs.tree;
       allocator_ = rhs.allocator_;
+      comp_ = rhs.comp_;
     }
     return *this;
   };
@@ -153,7 +157,7 @@ class map {
 
   key_compare key_comp() const { return key_compare(); }
 
-  value_compare value_comp() const { return value_compare(); }
+  value_compare value_comp() const { return value_compare(comp_); }
 
   size_type count(const key_type& k) const {
     if (tree.findNode(k) != NULL) {
