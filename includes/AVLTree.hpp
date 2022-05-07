@@ -224,11 +224,10 @@ class AVLTree {
   typedef typename Allocator::template rebind<Node>::other NodeAllcator;
 
  public:
-  template <class value>
   class tree_iterator
-      : public iterator<std::bidirectional_iterator_tag, value> {
+      : public iterator<std::bidirectional_iterator_tag, value_type> {
    private:
-    typedef iterator<std::bidirectional_iterator_tag, value> iterator_type;
+    typedef iterator<std::bidirectional_iterator_tag, value_type> iterator_type;
 
    public:
     typedef typename iterator_type::value_type value_type;
@@ -243,9 +242,6 @@ class AVLTree {
    public:
     tree_iterator() : current_node_(NULL){};
     explicit tree_iterator(Node* ptr) : current_node_(ptr) {}
-    template <class Iter>
-    tree_iterator(const tree_iterator<Iter>& it)
-        : current_node_(it.baseNode()){};
     tree_iterator(const tree_iterator& src) { *this = src; };
     ~tree_iterator(){};
     tree_iterator& operator=(const tree_iterator& rhs) {
@@ -292,9 +288,76 @@ class AVLTree {
     Node* baseNode() const { return current_node_; }
   };
 
+  class const_tree_iterator
+      : public iterator<std::bidirectional_iterator_tag, const value_type> {
+   private:
+    typedef iterator<std::bidirectional_iterator_tag, const value_type>
+        iterator_type;
+
+   public:
+    typedef typename iterator_type::value_type value_type;
+    typedef typename iterator_type::difference_type difference_type;
+    typedef typename iterator_type::pointer pointer;
+    typedef typename iterator_type::reference reference;
+    typedef typename iterator_type::iterator_category iterator_category;
+
+   private:
+    Node* current_node_;
+
+   public:
+    const_tree_iterator() : current_node_(NULL){};
+    explicit const_tree_iterator(Node* ptr) : current_node_(ptr){};
+    const_tree_iterator(const tree_iterator& it)
+        : current_node_(it.baseNode()){};
+    const_tree_iterator(const const_tree_iterator& src) { *this = src; };
+    ~const_tree_iterator(){};
+    const_tree_iterator& operator=(const const_tree_iterator& rhs) {
+      if (this != &rhs) {
+        current_node_ = rhs.current_node_;
+      }
+      return *this;
+    }
+
+    const_tree_iterator& operator++() {
+      current_node_ = current_node_->getNextNode();
+      return *this;
+    }
+
+    const_tree_iterator operator++(int) {
+      const_tree_iterator tmp = *this;
+      current_node_ = current_node_->getNextNode();
+      return tmp;
+    }
+
+    const_tree_iterator& operator--() {
+      current_node_ = current_node_->getPrevNode();
+      return *this;
+    }
+
+    const_tree_iterator operator--(int) {
+      const_tree_iterator tmp = *this;
+      current_node_ = current_node_->getPrevNode();
+      return tmp;
+    }
+
+    bool operator==(const const_tree_iterator& rhs) const {
+      return current_node_ == rhs.current_node_;
+    }
+
+    bool operator!=(const const_tree_iterator& rhs) const {
+      return current_node_ != rhs.current_node_;
+    }
+
+    reference operator*() const { return current_node_->data; }
+
+    pointer operator->() const { return &(operator*()); };
+
+    Node* baseNode() const { return current_node_; }
+  };
+
  private:
-  typedef tree_iterator<value_type> iterator;
-  typedef tree_iterator<const value_type> const_iterator;
+  typedef tree_iterator iterator;
+  typedef const_tree_iterator const_iterator;
 
  private:
   Node end;
