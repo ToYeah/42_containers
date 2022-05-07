@@ -40,15 +40,7 @@ class AVLTree {
 
     AVLNode(const AVLNode& src) : data(value_type(src.data)) { *this = src; }
 
-    ~AVLNode() {
-      if (parent) {
-        if (isRightChild()) {
-          parent->right = NULL;
-        } else {
-          parent->left = NULL;
-        }
-      }
-    }
+    ~AVLNode() {}
 
     AVLNode& operator=(const AVLNode& rhs) {
       if (this != &rhs) {
@@ -562,6 +554,11 @@ class AVLTree {
       else {
         Node* tmp = featured;
         featured = featured->parent;
+        if (tmp->isRightChild()) {
+          tmp->parent->right = NULL;
+        } else {
+          tmp->parent->left = NULL;
+        }
         delete tmp;
       }
     }
