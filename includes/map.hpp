@@ -154,8 +154,8 @@ class map {
   };
 
   void erase(iterator first, iterator last) {
-    for (iterator it = first; it != last; it++) {
-      erase(it);
+    for (iterator it = first; it != last;) {
+      erase(it++);
     }
   }
 

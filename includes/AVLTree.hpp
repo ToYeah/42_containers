@@ -586,7 +586,6 @@ class AVLTree {
                                        substitute_src->left);
 
       delete substitute_src;
-
     } else if (target->right) {
       target->parent->joinNode(target->isRightChild(), target->right);
       target->parent = NULL;
