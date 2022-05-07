@@ -243,6 +243,9 @@ class AVLTree {
    public:
     tree_iterator() : current_node_(NULL){};
     explicit tree_iterator(Node* ptr) : current_node_(ptr) {}
+    template <class Iter>
+    tree_iterator(const tree_iterator<Iter>& it)
+        : current_node_(it.baseNode()){};
     tree_iterator(const tree_iterator& src) { *this = src; };
     ~tree_iterator(){};
     tree_iterator& operator=(const tree_iterator& rhs) {
@@ -285,6 +288,8 @@ class AVLTree {
     reference operator*() const { return current_node_->data; }
 
     pointer operator->() const { return &(operator*()); };
+
+    Node* baseNode() const { return current_node_; }
   };
 
  private:
