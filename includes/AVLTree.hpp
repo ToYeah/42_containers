@@ -54,22 +54,6 @@ class AVLTree {
       return *this;
     }
 
-    void printTreeGraph() {
-      if (left_) left_->printTreeGraph();
-      std::cout << data_.first << " [label=\""
-                << "key: " << data_.first << "\nvalue: " << data_.second
-                << "\"]" << std::endl;
-      if (left_) {
-        std::cout << data_.first << "->" << left_->data_.first
-                  << " [color = blue];" << std::endl;
-      }
-      if (right_) {
-        std::cout << data_.first << "->" << right_->data_.first
-                  << " [color = red];" << std::endl;
-      }
-      if (right_) right_->printTreeGraph();
-    }
-
     bool compare(const Key& key) {
       if (Compare()(data_.first, key)) return true;
       return false;
@@ -200,6 +184,24 @@ class AVLTree {
     }
 
     bool isRightChild() { return this->parent_->right_ == this ? true : false; }
+
+#ifdef DEV
+    void printTreeGraph() {
+      if (left_) left_->printTreeGraph();
+      std::cout << data_.first << " [label=\""
+                << "key: " << data_.first << "\nvalue: " << data_.second
+                << "\"]" << std::endl;
+      if (left_) {
+        std::cout << data_.first << "->" << left_->data_.first
+                  << " [color = blue];" << std::endl;
+      }
+      if (right_) {
+        std::cout << data_.first << "->" << right_->data_.first
+                  << " [color = red];" << std::endl;
+      }
+      if (right_) right_->printTreeGraph();
+    }
+#endif
   };
 
  private:
