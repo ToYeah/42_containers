@@ -160,8 +160,9 @@ class map {
   }
 
   void swap(map& x) {
-    std::swap(tree, x.tree);
+    tree.swap(x.tree);
     std::swap(allocator_, x.allocator_);
+    std::swap(comp_, x.comp_);
   }
 
   key_compare key_comp() const { return key_compare(); }

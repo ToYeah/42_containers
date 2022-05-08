@@ -627,6 +627,14 @@ class AVLTree {
     if (res == NULL) return end_ptr;
     return res;
   }
+
+  void swap(AVLTree& x) {
+    std::swap(end, x.end);
+    root->parent = end_ptr;
+    x.root->parent = x.end_ptr;
+    std::swap(allocator, x.allocator);
+    std::swap(comp, x.comp);
+  }
 };
 
 }  // namespace ft
