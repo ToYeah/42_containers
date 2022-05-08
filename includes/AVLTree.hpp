@@ -389,16 +389,6 @@ class AVLTree {
     return featured;
   }
 
-  void printTreeGraph() {
-    if (!root_) {
-      std::cout << "root is NULL." << std::endl;
-    } else {
-      std::cout << "digraph sample {" << std::endl;
-      root_->printTreeGraph();
-      std::cout << "}" << std::endl;
-    }
-  }
-
   pair<iterator, bool> insertNode(const value_type& pair) {
     Node* node = findNode(pair.first);
     if (node) {
@@ -635,6 +625,19 @@ class AVLTree {
   static bool nodeRangeComp(Node* first, Node* second, const Key key) {
     return first->compare(key) && Node(key).compare(second->data_.first);
   }
+
+#ifdef DEV
+ public:
+  void printTreeGraph() {
+    if (!root_) {
+      std::cout << "root is NULL." << std::endl;
+    } else {
+      std::cout << "digraph sample {" << std::endl;
+      root_->printTreeGraph();
+      std::cout << "}" << std::endl;
+    }
+  }
+#endif
 };
 
 }  // namespace ft
