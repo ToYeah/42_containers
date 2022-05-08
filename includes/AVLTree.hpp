@@ -24,9 +24,9 @@ class AVLTree {
     AVLNode* left_;
     AVLNode* right_;
     AVLNode* parent_;
-    int height;
-    int size;
-    int bias;
+    size_t height_;
+    size_t size_;
+    int bias_;
 
     explicit AVLNode(const Key& key, const T& value = T(),
                      AVLNode* parent = NULL)
@@ -34,9 +34,9 @@ class AVLTree {
           left_(NULL),
           right_(NULL),
           parent_(parent),
-          height(1),
-          size(1),
-          bias(0) {}
+          height_(1),
+          size_(1),
+          bias_(0) {}
 
     AVLNode(const AVLNode& src) : data_(value_type(src.data_)) { *this = src; }
 
@@ -47,9 +47,9 @@ class AVLTree {
         left_ = rhs.left_;
         right_ = rhs.right_;
         parent_ = rhs.parent_;
-        height = rhs.height;
-        bias = rhs.bias;
-        size = rhs.size;
+        height_ = rhs.height_;
+        bias_ = rhs.bias_;
+        size_ = rhs.size_;
       }
       return *this;
     }
@@ -80,16 +80,16 @@ class AVLTree {
     }
 
     void updateNodeInfo() {
-      int right_h = right_ ? right_->height : 0;
-      int left_h = left_ ? left_->height : 0;
-      height = 1;
-      height += left_h > right_h ? left_h : right_h;
-      bias = left_h - right_h;
+      int right_h = right_ ? right_->height_ : 0;
+      int left_h = left_ ? left_->height_ : 0;
+      height_ = 1;
+      height_ += left_h > right_h ? left_h : right_h;
+      bias_ = left_h - right_h;
 
-      int right_s = right_ ? right_->size : 0;
-      int left_s = left_ ? left_->size : 0;
-      size = 1;
-      size += right_s + left_s;
+      int right_s = right_ ? right_->size_ : 0;
+      int left_s = left_ ? left_->size_ : 0;
+      size_ = 1;
+      size_ += right_s + left_s;
     }
 
     void joinNode(bool is_right_child, AVLNode* child) {
@@ -104,16 +104,16 @@ class AVLTree {
     }
 
     void rotate() {
-      if (bias > 1) {
-        if (left_ && left_->bias <= -1) {
+      if (bias_ > 1) {
+        if (left_ && left_->bias_ <= -1) {
           left_->rotateL();
           rotateR();
         } else {
           rotateR();
         }
 
-      } else if (bias < -1) {
-        if (right_ && right_->bias >= 1) {
+      } else if (bias_ < -1) {
+        if (right_ && right_->bias_ >= 1) {
           right_->rotateR();
           rotateL();
         } else {
@@ -446,7 +446,7 @@ class AVLTree {
 
   size_t size() const {
     size_t res = 0;
-    if (!isEmpty()) res = root_->size;
+    if (!isEmpty()) res = root_->size_;
     return res;
   }
 
