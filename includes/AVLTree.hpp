@@ -54,15 +54,6 @@ class AVLTree {
       return *this;
     }
 
-    bool compare(const Key& key) {
-      if (Compare()(data_.first, key)) return true;
-      return false;
-    }
-
-    bool equal(const Key& key) {
-      return !(compare(key)) && !(AVLNode(key).compare(data_.first));
-    }
-
     void updateNodeInfo() {
       int right_h = right_ ? right_->height_ : 0;
       int left_h = left_ ? left_->height_ : 0;
@@ -135,10 +126,6 @@ class AVLTree {
     void updateNode() {
       updateNodeInfo();
       rotate();
-    }
-
-    AVLNode** getNextDirection(const Key& key) {
-      return compare(key) ? &right_ : &left_;
     }
 
     AVLNode* getMaxNode() {
@@ -385,8 +372,8 @@ class AVLTree {
 
   Node* findNode(const Key& key) const {
     Node* featured = root_;
-    while (featured && !featured->equal(key)) {
-      featured = *(featured->getNextDirection(key));
+    while (featured && !nodeEqual(featured->data_.first, key)) {
+      featured = *(getNextDirection(featured, key));
     }
     return featured;
   }
@@ -537,10 +524,10 @@ class AVLTree {
     Node* featured = root_;
 
     while (featured != NULL) {
-      if (!featured->compare(key)) {
+      if (!(comp_(featured->data_.first, key))) {
         res = featured;
       }
-      if (featured->compare(key)) {
+      if (comp_(featured->data_.first, key)) {
         featured = featured->right_;
       } else {
         featured = featured->left_;
@@ -555,10 +542,10 @@ class AVLTree {
     Node* featured = root_;
 
     while (featured != NULL) {
-      if (featured->compare(key)) {
+      if (comp_(featured->data_.first, key)) {
         featured = featured->right_;
       } else {
-        if (!featured->equal(key)) {
+        if (!nodeEqual(featured->data_.first, key)) {
           res = featured;
         }
         featured = featured->left_;
@@ -594,7 +581,7 @@ class AVLTree {
     Node* featured = root_;
     Node** target = NULL;
     while (1) {
-      target = featured->getNextDirection(key);
+      target = getNextDirection(featured, key);
       if (*target == NULL) break;
       featured = *target;
     }
@@ -624,8 +611,17 @@ class AVLTree {
     return res;
   }
 
-  static bool nodeRangeComp(Node* first, Node* second, const Key key) {
-    return first->compare(key) && Node(key).compare(second->data_.first);
+  bool nodeRangeComp(Node* first, Node* second, const Key key) {
+    return comp_(first->data_.first, key) && comp_(key, second->data_.first);
+  }
+
+  Node** getNextDirection(Node* featured, const Key& key) const {
+    return comp_(featured->data_.first, key) ? &(featured->right_)
+                                             : &(featured->left_);
+  }
+
+  bool nodeEqual(const Key& lhs, const Key& rhs) const {
+    return !(comp_(lhs, rhs)) && !(comp_(rhs, lhs));
   }
 
 #ifdef DEV
