@@ -20,33 +20,33 @@ class AVLTree {
   typedef pair<const Key, T> value_type;
 
   struct AVLNode {
-    value_type data;
-    AVLNode* left;
-    AVLNode* right;
-    AVLNode* parent;
+    value_type data_;
+    AVLNode* left_;
+    AVLNode* right_;
+    AVLNode* parent_;
     int height;
     int size;
     int bias;
 
     explicit AVLNode(const Key& key, const T& value = T(),
                      AVLNode* parent = NULL)
-        : data(value_type(key, value)),
-          left(NULL),
-          right(NULL),
-          parent(parent),
+        : data_(value_type(key, value)),
+          left_(NULL),
+          right_(NULL),
+          parent_(parent),
           height(1),
           size(1),
           bias(0) {}
 
-    AVLNode(const AVLNode& src) : data(value_type(src.data)) { *this = src; }
+    AVLNode(const AVLNode& src) : data_(value_type(src.data_)) { *this = src; }
 
     ~AVLNode() {}
 
     AVLNode& operator=(const AVLNode& rhs) {
       if (this != &rhs) {
-        left = rhs.left;
-        right = rhs.right;
-        parent = rhs.parent;
+        left_ = rhs.left_;
+        right_ = rhs.right_;
+        parent_ = rhs.parent_;
         height = rhs.height;
         bias = rhs.bias;
         size = rhs.size;
@@ -55,66 +55,66 @@ class AVLTree {
     }
 
     void printTreeGraph() {
-      if (left) left->printTreeGraph();
-      std::cout << data.first << " [label=\""
-                << "key: " << data.first << "\nvalue: " << data.second << "\"]"
-                << std::endl;
-      if (left) {
-        std::cout << data.first << "->" << left->data.first
+      if (left_) left_->printTreeGraph();
+      std::cout << data_.first << " [label=\""
+                << "key: " << data_.first << "\nvalue: " << data_.second
+                << "\"]" << std::endl;
+      if (left_) {
+        std::cout << data_.first << "->" << left_->data_.first
                   << " [color = blue];" << std::endl;
       }
-      if (right) {
-        std::cout << data.first << "->" << right->data.first
+      if (right_) {
+        std::cout << data_.first << "->" << right_->data_.first
                   << " [color = red];" << std::endl;
       }
-      if (right) right->printTreeGraph();
+      if (right_) right_->printTreeGraph();
     }
 
     bool compare(const Key& key) {
-      if (Compare()(data.first, key)) return true;
+      if (Compare()(data_.first, key)) return true;
       return false;
     }
 
     bool equal(const Key& key) {
-      return !(compare(key)) && !(AVLNode(key).compare(data.first));
+      return !(compare(key)) && !(AVLNode(key).compare(data_.first));
     }
 
     void updateNodeInfo() {
-      int right_h = right ? right->height : 0;
-      int left_h = left ? left->height : 0;
+      int right_h = right_ ? right_->height : 0;
+      int left_h = left_ ? left_->height : 0;
       height = 1;
       height += left_h > right_h ? left_h : right_h;
       bias = left_h - right_h;
 
-      int right_s = right ? right->size : 0;
-      int left_s = left ? left->size : 0;
+      int right_s = right_ ? right_->size : 0;
+      int left_s = left_ ? left_->size : 0;
       size = 1;
       size += right_s + left_s;
     }
 
     void joinNode(bool is_right_child, AVLNode* child) {
       if (is_right_child) {
-        right = child;
+        right_ = child;
       } else {
-        left = child;
+        left_ = child;
       }
       if (child) {
-        child->parent = this;
+        child->parent_ = this;
       }
     }
 
     void rotate() {
       if (bias > 1) {
-        if (left && left->bias <= -1) {
-          left->rotateL();
+        if (left_ && left_->bias <= -1) {
+          left_->rotateL();
           rotateR();
         } else {
           rotateR();
         }
 
       } else if (bias < -1) {
-        if (right && right->bias >= 1) {
-          right->rotateR();
+        if (right_ && right_->bias >= 1) {
+          right_->rotateR();
           rotateL();
         } else {
           rotateL();
@@ -123,11 +123,11 @@ class AVLTree {
     }
 
     void rotateL() {
-      AVLNode* pivot = right;
-      AVLNode* old_parent = parent;
+      AVLNode* pivot = right_;
+      AVLNode* old_parent = parent_;
       bool is_right_child = isRightChild();
 
-      this->joinNode(RIGHT, pivot->left);
+      this->joinNode(RIGHT, pivot->left_);
       pivot->joinNode(LEFT, this);
       old_parent->joinNode(is_right_child, pivot);
       this->updateNodeInfo();
@@ -136,11 +136,11 @@ class AVLTree {
     }
 
     void rotateR() {
-      AVLNode* pivot = left;
-      AVLNode* old_parent = parent;
+      AVLNode* pivot = left_;
+      AVLNode* old_parent = parent_;
       bool is_right_child = isRightChild();
 
-      this->joinNode(LEFT, pivot->right);
+      this->joinNode(LEFT, pivot->right_);
       pivot->joinNode(RIGHT, this);
       old_parent->joinNode(is_right_child, pivot);
       this->updateNodeInfo();
@@ -154,52 +154,52 @@ class AVLTree {
     }
 
     AVLNode** getNextDirection(const Key& key) {
-      return compare(key) ? &right : &left;
+      return compare(key) ? &right_ : &left_;
     }
 
     AVLNode* getMaxNode() {
       AVLNode* featured = this;
-      while (featured->right) {
-        featured = featured->right;
+      while (featured->right_) {
+        featured = featured->right_;
       }
       return featured;
     }
 
     AVLNode* getMinNode() {
       AVLNode* featured = this;
-      while (featured->left) {
-        featured = featured->left;
+      while (featured->left_) {
+        featured = featured->left_;
       }
       return featured;
     }
 
     AVLNode* getNextNode() {
-      if (right) {
-        return right->getMinNode();
+      if (right_) {
+        return right_->getMinNode();
       } else if (!isRightChild()) {
-        return parent;
+        return parent_;
       }
-      AVLNode* featured = parent;
+      AVLNode* featured = parent_;
       while (featured->isRightChild()) {
-        featured = featured->parent;
+        featured = featured->parent_;
       }
-      return featured->parent;
+      return featured->parent_;
     }
 
     AVLNode* getPrevNode() {
-      if (left) {
-        return left->getMaxNode();
+      if (left_) {
+        return left_->getMaxNode();
       } else if (isRightChild()) {
-        return parent;
+        return parent_;
       }
-      AVLNode* featured = parent;
-      while (featured->parent->parent && !(featured->isRightChild())) {
-        featured = featured->parent;
+      AVLNode* featured = parent_;
+      while (featured->parent_->parent_ && !(featured->isRightChild())) {
+        featured = featured->parent_;
       }
-      return featured->parent;
+      return featured->parent_;
     }
 
-    bool isRightChild() { return this->parent->right == this ? true : false; }
+    bool isRightChild() { return this->parent_->right_ == this ? true : false; }
   };
 
  private:
@@ -264,7 +264,7 @@ class AVLTree {
       return current_node_ != rhs.current_node_;
     }
 
-    reference operator*() const { return current_node_->data; }
+    reference operator*() const { return current_node_->data_; }
 
     pointer operator->() const { return &(operator*()); };
 
@@ -331,7 +331,7 @@ class AVLTree {
       return current_node_ != rhs.current_node_;
     }
 
-    reference operator*() const { return current_node_->data; }
+    reference operator*() const { return current_node_->data_; }
 
     pointer operator->() const { return &(operator*()); };
 
@@ -353,12 +353,12 @@ class AVLTree {
   AVLTree(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
       : end(Node(Key())),
         end_ptr(&end),
-        root(end.left),
+        root(end.left_),
         allocator(NodeAllcator(alloc)),
         comp(comp){};
 
   AVLTree(const AVLTree& src)
-      : end(Node(Key())), end_ptr(&end), root(end.left) {
+      : end(Node(Key())), end_ptr(&end), root(end.left_) {
     *this = src;
   };
 
@@ -374,7 +374,7 @@ class AVLTree {
       Node* featured = rhs.root->getMinNode();
 
       while (featured != &(rhs.end)) {
-        this->addNode(featured->data.first, featured->data.second);
+        this->addNode(featured->data_.first, featured->data_.second);
         featured = featured->getNextNode();
       }
     }
@@ -384,7 +384,7 @@ class AVLTree {
   void balanceNode(Node* featured) {
     while (featured && featured != &end) {
       featured->updateNode();
-      featured = featured->parent;
+      featured = featured->parent_;
     }
   }
 
@@ -433,7 +433,7 @@ class AVLTree {
     res = allocator.allocate(1);
 
     allocator.construct(res, Node(key, value));
-    res->parent = parent;
+    res->parent_ = parent;
     return res;
   }
 
@@ -446,7 +446,7 @@ class AVLTree {
   }
 
   bool nodeRangeComp(Node* first, Node* second, const Key key) {
-    return first->compare(key) && Node(key).compare(second->data.first);
+    return first->compare(key) && Node(key).compare(second->data_.first);
   }
 
  public:
@@ -469,8 +469,8 @@ class AVLTree {
       prev--;
 
       if (nodeRangeComp(prev.baseNode(), hint.baseNode(), val.first) &&
-          hint.baseNode()->left == NULL) {
-        target = &(hint.baseNode()->left);
+          hint.baseNode()->left_ == NULL) {
+        target = &(hint.baseNode()->left_);
       }
     }
 
@@ -479,8 +479,8 @@ class AVLTree {
       next++;
 
       if (nodeRangeComp(hint.baseNode(), next.baseNode(), val.first) &&
-          hint.baseNode()->right == NULL) {
-        target = &(hint.baseNode()->left);
+          hint.baseNode()->right_ == NULL) {
+        target = &(hint.baseNode()->left_);
       }
     }
 
@@ -538,17 +538,17 @@ class AVLTree {
 
     Node* featured = root->getMinNode();
     while (featured != &end) {
-      if (featured->left)
-        featured = featured->left;
-      else if (featured->right)
-        featured = featured->right;
+      if (featured->left_)
+        featured = featured->left_;
+      else if (featured->right_)
+        featured = featured->right_;
       else {
         Node* tmp = featured;
-        featured = featured->parent;
+        featured = featured->parent_;
         if (tmp->isRightChild()) {
-          tmp->parent->right = NULL;
+          tmp->parent_->right_ = NULL;
         } else {
-          tmp->parent->left = NULL;
+          tmp->parent_->left_ = NULL;
         }
         delete tmp;
       }
@@ -561,28 +561,28 @@ class AVLTree {
       return false;
     }
 
-    Node* featured = target->parent;
+    Node* featured = target->parent_;
 
-    if (target->left) {
-      Node* substitute_src = target->left->getMaxNode();
+    if (target->left_) {
+      Node* substitute_src = target->left_->getMaxNode();
 
       Node* substitute_dst = allocateNode(*substitute_src);
-      target->parent->joinNode(target->isRightChild(), substitute_dst);
-      substitute_dst->joinNode(RIGHT, target->right);
-      substitute_dst->joinNode(LEFT, target->left);
+      target->parent_->joinNode(target->isRightChild(), substitute_dst);
+      substitute_dst->joinNode(RIGHT, target->right_);
+      substitute_dst->joinNode(LEFT, target->left_);
 
-      featured = substitute_src->parent;
-      substitute_src->parent->joinNode(substitute_src->isRightChild(),
-                                       substitute_src->left);
+      featured = substitute_src->parent_;
+      substitute_src->parent_->joinNode(substitute_src->isRightChild(),
+                                        substitute_src->left_);
 
       delete substitute_src;
-    } else if (target->right) {
-      target->parent->joinNode(target->isRightChild(), target->right);
+    } else if (target->right_) {
+      target->parent_->joinNode(target->isRightChild(), target->right_);
     } else {
       if (target->isRightChild()) {
-        target->parent->right = NULL;
+        target->parent_->right_ = NULL;
       } else {
-        target->parent->left = NULL;
+        target->parent_->left_ = NULL;
       }
     }
 
@@ -600,9 +600,9 @@ class AVLTree {
         res = featured;
       }
       if (featured->compare(key)) {
-        featured = featured->right;
+        featured = featured->right_;
       } else {
-        featured = featured->left;
+        featured = featured->left_;
       }
     }
     if (res == NULL) return end_ptr;
@@ -615,12 +615,12 @@ class AVLTree {
 
     while (featured != NULL) {
       if (featured->compare(key)) {
-        featured = featured->right;
+        featured = featured->right_;
       } else {
         if (!featured->equal(key)) {
           res = featured;
         }
-        featured = featured->left;
+        featured = featured->left_;
       }
     }
 
@@ -630,8 +630,8 @@ class AVLTree {
 
   void swap(AVLTree& x) {
     std::swap(end, x.end);
-    root->parent = end_ptr;
-    x.root->parent = x.end_ptr;
+    root->parent_ = end_ptr;
+    x.root->parent_ = x.end_ptr;
     std::swap(allocator, x.allocator);
     std::swap(comp, x.comp);
   }
