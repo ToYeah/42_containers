@@ -381,33 +381,6 @@ class AVLTree {
     return *this;
   }
 
-  void balanceNode(Node* featured) {
-    while (featured && featured != &end_) {
-      featured->updateNode();
-      featured = featured->parent_;
-    }
-  }
-
-  Node* addNode(const Key& key, const T& value) {
-    if (!root_) {
-      root_ = allocateNode(key, value, &end_);
-      return root_;
-    }
-
-    Node* featured = root_;
-    Node** target = NULL;
-    while (1) {
-      target = featured->getNextDirection(key);
-      if (*target == NULL) break;
-      featured = *target;
-    }
-
-    *target = allocateNode(key, value, featured);
-
-    balanceNode(featured);
-    return *target;
-  }
-
   Node* findNode(const Key& key) const {
     Node* featured = root_;
     while (featured && !featured->equal(key)) {
@@ -426,30 +399,6 @@ class AVLTree {
     }
   }
 
-  Node* allocateNode(const Key& key, const T& value = T(),
-                     Node* parent = NULL) {
-    Node* res = NULL;
-
-    res = allocator_.allocate(1);
-
-    allocator_.construct(res, Node(key, value));
-    res->parent_ = parent;
-    return res;
-  }
-
-  Node* allocateNode(const AVLNode& src) {
-    Node* res = NULL;
-
-    res = allocator_.allocate(1);
-    allocator_.construct(res, src);
-    return res;
-  }
-
-  bool nodeRangeComp(Node* first, Node* second, const Key key) {
-    return first->compare(key) && Node(key).compare(second->data_.first);
-  }
-
- public:
   pair<iterator, bool> insertNode(const value_type& pair) {
     Node* node = findNode(pair.first);
     if (node) {
@@ -634,6 +583,57 @@ class AVLTree {
     x.root_->parent_ = x.end_ptr_;
     std::swap(allocator_, x.allocator_);
     std::swap(comp_, x.comp_);
+  }
+
+ private:
+  void balanceNode(Node* featured) {
+    while (featured && featured != &end_) {
+      featured->updateNode();
+      featured = featured->parent_;
+    }
+  }
+
+  Node* addNode(const Key& key, const T& value) {
+    if (!root_) {
+      root_ = allocateNode(key, value, &end_);
+      return root_;
+    }
+
+    Node* featured = root_;
+    Node** target = NULL;
+    while (1) {
+      target = featured->getNextDirection(key);
+      if (*target == NULL) break;
+      featured = *target;
+    }
+
+    *target = allocateNode(key, value, featured);
+
+    balanceNode(featured);
+    return *target;
+  }
+
+  Node* allocateNode(const Key& key, const T& value = T(),
+                     Node* parent = NULL) {
+    Node* res = NULL;
+
+    res = allocator_.allocate(1);
+
+    allocator_.construct(res, Node(key, value));
+    res->parent_ = parent;
+    return res;
+  }
+
+  Node* allocateNode(const AVLNode& src) {
+    Node* res = NULL;
+
+    res = allocator_.allocate(1);
+    allocator_.construct(res, src);
+    return res;
+  }
+
+  static bool nodeRangeComp(Node* first, Node* second, const Key key) {
+    return first->compare(key) && Node(key).compare(second->data_.first);
   }
 };
 
