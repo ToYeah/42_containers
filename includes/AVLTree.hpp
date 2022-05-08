@@ -343,22 +343,22 @@ class AVLTree {
   typedef const_tree_iterator const_iterator;
 
  private:
-  Node end;
-  Node* end_ptr;
-  Node*& root;
-  NodeAllcator allocator;
-  Compare comp;
+  Node end_;
+  Node* end_ptr_;
+  Node*& root_;
+  NodeAllcator allocator_;
+  Compare comp_;
 
  public:
   AVLTree(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
-      : end(Node(Key())),
-        end_ptr(&end),
-        root(end.left_),
-        allocator(NodeAllcator(alloc)),
-        comp(comp){};
+      : end_(Node(Key())),
+        end_ptr_(&end_),
+        root_(end_.left_),
+        allocator_(NodeAllcator(alloc)),
+        comp_(comp){};
 
   AVLTree(const AVLTree& src)
-      : end(Node(Key())), end_ptr(&end), root(end.left_) {
+      : end_(Node(Key())), end_ptr_(&end_), root_(end_.left_) {
     *this = src;
   };
 
@@ -366,14 +366,14 @@ class AVLTree {
 
   AVLTree& operator=(const AVLTree& rhs) {
     if (this != &rhs) {
-      allocator = rhs.allocator;
-      comp = rhs.comp;
+      allocator_ = rhs.allocator_;
+      comp_ = rhs.comp_;
 
       clearTree();
 
-      Node* featured = rhs.root->getMinNode();
+      Node* featured = rhs.root_->getMinNode();
 
-      while (featured != &(rhs.end)) {
+      while (featured != &(rhs.end_)) {
         this->addNode(featured->data_.first, featured->data_.second);
         featured = featured->getNextNode();
       }
@@ -382,19 +382,19 @@ class AVLTree {
   }
 
   void balanceNode(Node* featured) {
-    while (featured && featured != &end) {
+    while (featured && featured != &end_) {
       featured->updateNode();
       featured = featured->parent_;
     }
   }
 
   Node* addNode(const Key& key, const T& value) {
-    if (!root) {
-      root = allocateNode(key, value, &end);
-      return root;
+    if (!root_) {
+      root_ = allocateNode(key, value, &end_);
+      return root_;
     }
 
-    Node* featured = root;
+    Node* featured = root_;
     Node** target = NULL;
     while (1) {
       target = featured->getNextDirection(key);
@@ -409,7 +409,7 @@ class AVLTree {
   }
 
   Node* findNode(const Key& key) const {
-    Node* featured = root;
+    Node* featured = root_;
     while (featured && !featured->equal(key)) {
       featured = *(featured->getNextDirection(key));
     }
@@ -417,11 +417,11 @@ class AVLTree {
   }
 
   void printTreeGraph() {
-    if (!root) {
+    if (!root_) {
       std::cout << "root is NULL." << std::endl;
     } else {
       std::cout << "digraph sample {" << std::endl;
-      root->printTreeGraph();
+      root_->printTreeGraph();
       std::cout << "}" << std::endl;
     }
   }
@@ -430,9 +430,9 @@ class AVLTree {
                      Node* parent = NULL) {
     Node* res = NULL;
 
-    res = allocator.allocate(1);
+    res = allocator_.allocate(1);
 
-    allocator.construct(res, Node(key, value));
+    allocator_.construct(res, Node(key, value));
     res->parent_ = parent;
     return res;
   }
@@ -440,8 +440,8 @@ class AVLTree {
   Node* allocateNode(const AVLNode& src) {
     Node* res = NULL;
 
-    res = allocator.allocate(1);
-    allocator.construct(res, src);
+    res = allocator_.allocate(1);
+    allocator_.construct(res, src);
     return res;
   }
 
@@ -474,7 +474,7 @@ class AVLTree {
       }
     }
 
-    if (hint != getEndIterator() && hint.baseNode() != root->getMaxNode()) {
+    if (hint != getEndIterator() && hint.baseNode() != root_->getMaxNode()) {
       iterator next = hint;
       next++;
 
@@ -493,33 +493,33 @@ class AVLTree {
     return res;
   }
 
-  iterator getBeginIterator() { return iterator(end_ptr->getMinNode()); }
+  iterator getBeginIterator() { return iterator(end_ptr_->getMinNode()); }
 
   const_iterator getBeginIterator() const {
-    return const_iterator(end_ptr->getMinNode());
+    return const_iterator(end_ptr_->getMinNode());
   }
 
-  iterator getEndIterator() { return iterator(end_ptr); }
+  iterator getEndIterator() { return iterator(end_ptr_); }
 
-  const_iterator getEndIterator() const { return const_iterator(end_ptr); }
+  const_iterator getEndIterator() const { return const_iterator(end_ptr_); }
 
-  bool isEmpty() const { return root == NULL; }
+  bool isEmpty() const { return root_ == NULL; }
 
   size_t size() const {
     size_t res = 0;
-    if (!isEmpty()) res = root->size;
+    if (!isEmpty()) res = root_->size;
     return res;
   }
 
   typename NodeAllcator::size_type getMaxSize() const {
-    return allocator.max_size();
+    return allocator_.max_size();
   }
 
   iterator findData(const Key& key) {
     Node* res = NULL;
     res = findNode(key);
     if (res == NULL)
-      return iterator(end_ptr);
+      return iterator(end_ptr_);
     else
       return iterator(res);
   }
@@ -528,16 +528,16 @@ class AVLTree {
     Node* res = NULL;
     res = findNode(key);
     if (res == NULL)
-      return const_iterator(end_ptr);
+      return const_iterator(end_ptr_);
     else
       return const_iterator(res);
   }
 
   void clearTree() {
-    if (root == NULL) return;
+    if (root_ == NULL) return;
 
-    Node* featured = root->getMinNode();
-    while (featured != &end) {
+    Node* featured = root_->getMinNode();
+    while (featured != &end_) {
       if (featured->left_)
         featured = featured->left_;
       else if (featured->right_)
@@ -593,7 +593,7 @@ class AVLTree {
 
   Node* findLowerBoundNode(const Key& key) const {
     Node* res = NULL;
-    Node* featured = root;
+    Node* featured = root_;
 
     while (featured != NULL) {
       if (!featured->compare(key)) {
@@ -605,13 +605,13 @@ class AVLTree {
         featured = featured->left_;
       }
     }
-    if (res == NULL) return end_ptr;
+    if (res == NULL) return end_ptr_;
     return res;
   }
 
   Node* findUpperBoundNode(const Key& key) const {
     Node* res = NULL;
-    Node* featured = root;
+    Node* featured = root_;
 
     while (featured != NULL) {
       if (featured->compare(key)) {
@@ -624,16 +624,16 @@ class AVLTree {
       }
     }
 
-    if (res == NULL) return end_ptr;
+    if (res == NULL) return end_ptr_;
     return res;
   }
 
   void swap(AVLTree& x) {
-    std::swap(end, x.end);
-    root->parent_ = end_ptr;
-    x.root->parent_ = x.end_ptr;
-    std::swap(allocator, x.allocator);
-    std::swap(comp, x.comp);
+    std::swap(end_, x.end_);
+    root_->parent_ = end_ptr_;
+    x.root_->parent_ = x.end_ptr_;
+    std::swap(allocator_, x.allocator_);
+    std::swap(comp_, x.comp_);
   }
 };
 
