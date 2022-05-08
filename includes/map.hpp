@@ -51,7 +51,11 @@ class map {
     }
   };
 
+#ifdef DEV
  public:
+#else
+ private:
+#endif
   avl_tree tree;
   allocator_type allocator_;
   Compare comp_;
