@@ -125,6 +125,10 @@ class vector {
   void reserve(size_type n) {
     if (capacity() >= n) return;
 
+    if (n > max_size()) {
+      throw std::length_error("ft::vector reserve() length_error");
+    }
+
     iterator old_begin = begin();
     iterator old_end = end();
     reverse_iterator old_rbegin = rbegin();
@@ -155,14 +159,14 @@ class vector {
 
   reference at(size_type pos) {
     if (!(pos < size())) {
-      throw std::out_of_range("");
+      throw std::out_of_range("ft::vector at() out_of_range");
     }
     return first_[pos];
   }
 
   const_reference at(size_type pos) const {
     if (!(pos < size())) {
-      throw std::out_of_range("");
+      throw std::out_of_range("ft::vector at() out_of_range");
     }
     return first_[pos];
   }
