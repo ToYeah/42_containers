@@ -86,7 +86,46 @@ class map {
     return *this;
   };
 
-  allocator_type get_allocator() const { return allocator_; };
+  // Iterators-------------------------------------------
+
+  iterator begin() { return tree.getBeginIterator(); };
+  const_iterator begin() const { return tree.getBeginIterator(); };
+
+  iterator end() { return tree.getEndIterator(); };
+  const_iterator end() const { return tree.getEndIterator(); };
+
+  reverse_iterator rbegin() { return reverse_iterator(end()); };
+  const_reverse_iterator rbegin() const {
+    return const_reverse_iterator(end());
+  };
+
+  reverse_iterator rend() { return reverse_iterator(begin()); };
+  const_reverse_iterator rend() const {
+    return const_reverse_iterator(begin());
+  };
+
+  // Capacity--------------------------------------------
+
+  bool empty() const { return tree.isEmpty(); };
+
+  size_type size() const { return tree.size(); };
+
+  size_type max_size() const {
+    return std::min<size_type>(std::numeric_limits<difference_type>::max(),
+                               tree.getMaxSize());
+  };
+
+  // Element access--------------------------------------
+
+  mapped_type& operator[](const key_type& k) {
+    iterator it = tree.findData(k);
+    if (it == end()) {
+      it = insert(ft::make_pair(k, mapped_type())).first;
+    }
+    return (*it).second;
+  };
+
+  // Modifiers-------------------------------------------
 
   pair<iterator, bool> insert(const value_type& value) {
     return tree.insertNode(value);
@@ -109,45 +148,6 @@ class map {
     }
   }
 
-  iterator begin() { return tree.getBeginIterator(); };
-  const_iterator begin() const { return tree.getBeginIterator(); };
-
-  iterator end() { return tree.getEndIterator(); };
-  const_iterator end() const { return tree.getEndIterator(); };
-
-  reverse_iterator rbegin() { return reverse_iterator(end()); };
-  const_reverse_iterator rbegin() const {
-    return const_reverse_iterator(end());
-  };
-
-  reverse_iterator rend() { return reverse_iterator(begin()); };
-  const_reverse_iterator rend() const {
-    return const_reverse_iterator(begin());
-  };
-
-  bool empty() const { return tree.isEmpty(); };
-
-  size_type size() const { return tree.size(); };
-
-  size_type max_size() const {
-    return std::min<size_type>(std::numeric_limits<difference_type>::max(),
-                               tree.getMaxSize());
-  };
-
-  mapped_type& operator[](const key_type& k) {
-    iterator it = tree.findData(k);
-    if (it == end()) {
-      it = insert(ft::make_pair(k, mapped_type())).first;
-    }
-    return (*it).second;
-  };
-
-  iterator find(const key_type& k) { return tree.findData(k); }
-
-  const_iterator find(const key_type& k) const { return tree.findData(k); };
-
-  void clear() { tree.clearTree(); };
-
   void erase(iterator position) { tree.deleteNode((*position).first); };
 
   size_type erase(const key_type& k) {
@@ -169,9 +169,19 @@ class map {
     std::swap(comp_, x.comp_);
   }
 
+  void clear() { tree.clearTree(); };
+
+  // Observers-------------------------------------------
+
   key_compare key_comp() const { return key_compare(); }
 
   value_compare value_comp() const { return value_compare(comp_); }
+
+  // Operations------------------------------------------
+
+  iterator find(const key_type& k) { return tree.findData(k); }
+
+  const_iterator find(const key_type& k) const { return tree.findData(k); };
 
   size_type count(const key_type& k) const {
     if (tree.findNode(k) != NULL) {
@@ -201,6 +211,9 @@ class map {
   pair<const_iterator, const_iterator> equal_range(const key_type& k) const {
     return ft::make_pair(lower_bound(k), upper_bound(k));
   }
+  // Allocator-------------------------------------------
+
+  allocator_type get_allocator() const { return allocator_; };
 };
 
 template <class Key, class T, class Compare, class Alloc>
