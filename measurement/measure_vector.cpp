@@ -16,9 +16,8 @@ int main() {
   }
 
   {
-    // TEST: Constructor Allocator
-    std::allocator<std::string> alloc;
-    MEASUREMENT(LOOP(TEST::vector<std::string> vec1(alloc)));
+    // TEST: Fill Allocator
+    MEASUREMENT(TEST::vector<std::string> vec1(10000, "hello"));
   }
 
   {
