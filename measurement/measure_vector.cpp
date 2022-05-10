@@ -5,47 +5,43 @@
 #include "vector.hpp"
 
 int main() {
-  std::list<int> lst;
+  std::list<std::string> lst;
   for (size_t i = 0; i < 10000; i++) {
-    lst.push_back(i * i);
-  }
-  std::list<std::string> lst_s;
-  for (size_t i = 0; i < 10000; i++) {
-    lst_s.push_back("hello");
+    lst.push_back("hello");
   }
 
   {
     // TEST: Constructor Default
-    MEASUREMENT(LOOP(TEST::vector<int> vec1;));
+    MEASUREMENT(LOOP(TEST::vector<std::string> vec1;));
   }
 
   {
     // TEST: Constructor Allocator
-    std::allocator<int> alloc;
-    MEASUREMENT(LOOP(TEST::vector<int> vec1(alloc)));
+    std::allocator<std::string> alloc;
+    MEASUREMENT(LOOP(TEST::vector<std::string> vec1(alloc)));
   }
 
   {
     // TEST: Constructor Copy
-    TEST::vector<int> vec;
-    vec.push_back(1);
-    vec.push_back(2);
-    vec.push_back(3);
-    MEASUREMENT(LOOP(TEST::vector<int> vec1(vec)));
+    TEST::vector<std::string> vec;
+    vec.push_back("hello");
+    vec.push_back("helo");
+    vec.push_back("heo");
+    MEASUREMENT(LOOP(TEST::vector<std::string> vec1(vec)));
   }
 
   {
     // TEST: Constructor Range
-    MEASUREMENT(TEST::vector<int> vec(lst.begin(), lst.end()));
+    MEASUREMENT(TEST::vector<std::string> vec(lst.begin(), lst.end()));
   };
 
   {
     // TEST: Constructor Size Value
-    MEASUREMENT(TEST::vector<int> vec(10000, 10000));
+    MEASUREMENT(TEST::vector<std::string> vec(10000, "hello"));
   }
 
   {// TEST: Destructor
-   MEASUREMENT({ TEST::vector<int> vec(10000, 10000); })}
+   MEASUREMENT({ TEST::vector<std::string> vec(10000, "hello"); })}
 
   {
     // TEST: Operator=
@@ -56,85 +52,85 @@ int main() {
 
   {
     // TEST: begin()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.begin()))
   }
 
   {
     // TEST: begin() const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.begin()))
   }
 
   {
     // TEST: end()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.end()))
   }
 
   {
     // TEST: end() const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.end()))
   }
 
   {
     // TEST: rbegin()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.rbegin()))
   }
 
   {
     // TEST: rbegin() const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.rbegin()))
   }
 
   {
     // TEST: rend()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.rend()))
   }
 
   {
     // TEST: rend() const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.rend()))
   }
 
   {
     // TEST: size()
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.size()))
   }
 
   {
     // TEST: max_size()
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.max_size()))
   }
 
   {
     // TEST: resize()
-    TEST::vector<int> vec(1, 1);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.resize(10000)))
   }
 
   {
     // TEST: capacity()
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.capacity()))
   }
 
   {
     // TEST: empty() false
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.empty()))
   }
 
   {
     // TEST: empty() true
-    const TEST::vector<int> vec;
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.empty()))
   }
 
@@ -146,62 +142,62 @@ int main() {
 
   {
     // TEST: operator[]
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(for (size_t i = 0; i < 10000; i++) { vec[i]; })
   }
 
   {
     // TEST: operator[] const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(for (size_t i = 0; i < 10000; i++) { vec[i]; })
   }
 
   {
     // TEST: at()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(for (size_t i = 0; i < 10000; i++) { vec.at(i); })
   }
 
   {
     // TEST: at() const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(for (size_t i = 0; i < 10000; i++) { vec.at(i); })
   }
 
   {
     // TEST: front()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.front()))
   }
 
   {
     // TEST: front() const
-    const TEST::vector<int> vec(10000, 10000);
+    const TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.front()))
   }
 
   {
     // TEST: back()
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.back()))
   }
 
   {
     // TEST: back() const
-    const TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(LOOP(vec.back()))
   }
 
   {
     // TEST: assign Range
-    TEST::vector<int> vec(10000, 10000);
+    TEST::vector<std::string> vec(10000, "hello");
     MEASUREMENT(vec.assign(lst.begin(), lst.end()))
   }
 
   {
     // TEST: assign size value
-    TEST::vector<int> vec(100, 2000);
-    MEASUREMENT(vec.assign(10000, 10000))
+    TEST::vector<std::string> vec(10000, "hello");
+    MEASUREMENT(vec.assign(10000, "world"))
   }
 
   {
@@ -231,7 +227,7 @@ int main() {
   {
     // TEST: insert position Range
     TEST::vector<std::string> vec(1, "hello");
-    MEASUREMENT(vec.insert(vec.begin(), lst_s.begin(), lst_s.end()))
+    MEASUREMENT(vec.insert(vec.begin(), lst.begin(), lst.end()))
   }
 
   {
