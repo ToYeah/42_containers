@@ -232,6 +232,7 @@ class vector {
   }
 
   void pop_back() {
+    if (size() == 0) return;
     last_--;
     destroy(last_);
   }
