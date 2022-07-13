@@ -9,7 +9,7 @@ VPATH			:= $(shell find $(SRCS_DIR) -type d | awk '{print $$0":"}')
 OBJS			:= $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 DEPENDS			:= $(OBJS:.o=.d);
 
-all: $(NAME)
+all: $(GTEST)
 
 -include $(DEPENDS)
 
@@ -17,8 +17,6 @@ $(OBJS_DIR)/%.o : %.cpp
 	@if [ ! -d $(OBJS_DIR) ]; then mkdir $(OBJS_DIR); fi;
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-$(NAME): $(OBJS) 
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
@@ -28,7 +26,6 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
 
 GTESTER_NAME	:= g_tester
 
@@ -68,3 +65,5 @@ $(GTESTER_NAME): $(GTEST) $(TEST_OBJS)
 gtest: $(GTESTER_NAME)
 	clear
 	./g_tester
+
+.PHONY: all clean fclean re gtest
