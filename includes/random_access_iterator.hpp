@@ -5,7 +5,7 @@
 
 namespace ft {
 template <typename Iterator>
-class ra_iterator {  // public iterator
+class ra_iterator {
  protected:
   Iterator current_;
   typedef iterator_traits<Iterator> traits_type_;
