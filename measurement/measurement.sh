@@ -34,3 +34,4 @@ fi
 
 measure vector
 measure stack
+measure map
