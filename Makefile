@@ -1,4 +1,5 @@
-NAME			:= span
+
+GTESTER_NAME	:= g_tester
 CXX				:= clang++
 CXXFLAGS		:= -Wall -Wextra -Werror -MMD -MP -std=c++98
 SRCS_DIR		:= .
@@ -9,7 +10,7 @@ VPATH			:= $(shell find $(SRCS_DIR) -type d | awk '{print $$0":"}')
 OBJS			:= $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 DEPENDS			:= $(OBJS:.o=.d);
 
-all: $(GTEST)
+all: $(GTESTER_NAME)
 
 -include $(DEPENDS)
 
@@ -22,12 +23,11 @@ clean:
 	$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(GTESTER_NAME)
 
 re: fclean all
 
 
-GTESTER_NAME	:= g_tester
 
 GTEST_DIR		:= googletest
 GTEST			:= $(GTEST_DIR)/gtest $(GTEST_DIR)/googletest-release-1.11.0
@@ -62,8 +62,8 @@ $(GTESTER_NAME): $(GTEST) $(TEST_OBJS)
 	$(TEST_OBJS) $(GTEST_DIR)/googletest-release-1.11.0/googletest/src/gtest_main.cc $(GTEST_DIR)/gtest/gtest-all.cc \
 	-I$(GTEST_DIR) -lpthread -o $(GTESTER_NAME)
 
-gtest: $(GTESTER_NAME)
+test: $(GTESTER_NAME)
 	clear
 	./g_tester
 
-.PHONY: all clean fclean re gtest
+.PHONY: all clean fclean re test
