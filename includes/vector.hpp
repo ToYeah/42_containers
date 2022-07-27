@@ -120,7 +120,7 @@ class vector {
     return std::distance(begin(), const_iterator(end_of_storage_));
   };
 
-  bool empty() const { return size() == 0; };
+  bool empty() const { return first_ == last_; };
 
   void reserve(size_type n) {
     if (capacity() >= n) return;
